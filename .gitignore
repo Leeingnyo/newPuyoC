@@ -1,0 +1,11 @@
+# Common
+*.o
+*.out
+
+# Windows
+*.exe
+
+# Dev C++
+*.dev
+*.win
+*.layout
