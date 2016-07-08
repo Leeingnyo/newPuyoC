@@ -9,3 +9,6 @@
 *.dev
 *.win
 *.layout
+
+# tests
+well512test
