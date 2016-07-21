@@ -4,8 +4,7 @@ class WELLRNG512Generator {
     int index = 0;
     public:
         WELLRNG512Generator(){
-            int seed;
-            srand(seed);
+            srand(time(NULL));
             for (int i = 0; i < 16; i++)
                 state[i] = rand();
         }
