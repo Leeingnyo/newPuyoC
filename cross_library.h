@@ -22,6 +22,7 @@ namespace Console {
     
     void CursorView(bool show);
     
+#ifdef _WIN32
     enum class Code {
         BLACK         = 0,
         DARK_BLUE     = 1,
@@ -40,6 +41,26 @@ namespace Console {
         YELLOW        = 14,
         WHITE         = 15,
     };
+#else
+    enum class Code {
+        BLACK         = 30,
+        DARK_BLUE     = 34,
+        DARK_GREEN    = 32,
+        DARK_SKY_BLUE = 36,
+        DARK_RED      = 31,
+        DARK_VIOLET   = 35,
+        DARK_YELLOW   = 33,
+        GRAY          = 37,
+        DARK_GRAY     = 90,
+        BLUE          = 94,
+        GREEN         = 92,
+        SKY_BLUE      = 96,
+        RED           = 91,
+        VIOLET        = 95,
+        YELLOW        = 93,
+        WHITE         = 97,
+    };
+#endif
     
     class TextColor {
         Code code = Code::GRAY;
