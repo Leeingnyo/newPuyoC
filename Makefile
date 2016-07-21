@@ -1,4 +1,4 @@
-
+﻿
 all: cross_library.o game.o main.o
 	g++ -o new_puyo_c cross_library.o game.o main.o
 
