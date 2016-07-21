@@ -1,7 +1,15 @@
 
-all:
-	
-	
+all: cross_library.o game.o main.o
+	g++ -o new_puyo_c cross_library.o game.o main.o
+
+cross_library.o: cross_library.cpp cross_library.h
+	g++ -c cross_library.cpp -std=c++11
+
+game.o: game.cpp game.h board.h puyo.h player_information.h WELLRNG512Gen.h cross_library.h common.h
+	g++ -c game.cpp -std=c++11
+
+main.o: main.cpp game.h board.h puyo.h player_information.h WELLRNG512Gen.h cross_library.h common.h
+	g++ -c main.cpp -std=c++11
 
 # tests
 test: welltest cltest

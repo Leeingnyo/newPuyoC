@@ -46,9 +46,9 @@ namespace Console {
     public:
         TextColor(Code code) : code(code) {}
         
-        friend std::ostream& operator << (std::ostream& os, const TextColor& cc);
+        friend std::ostream& operator<<(std::ostream& os, const TextColor& cc);
     };
-    std::ostream& operator << (std::ostream& os, const TextColor& cc);
+    std::ostream& operator<<(std::ostream& os, const TextColor& cc);
     
     extern TextColor black;
     extern TextColor dark_blue;

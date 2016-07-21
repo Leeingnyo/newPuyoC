@@ -63,11 +63,14 @@ std::ostream& Console::operator<<(std::ostream& os, const GotoXY& gotoxy){
 
 #else
 
+#include <iostream>
 #include <ostream>
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+
+#include "cross_library.h"
 
 bool kbhit() {
     struct termios oldt, newt;
@@ -110,7 +113,7 @@ int getch() {
 }
 
 void Console::Sleep(int t){
-    std::sleep(t);
+    usleep(t);
 }
 
 void Console::ScreenClear(){
@@ -124,7 +127,7 @@ void Console::ShowCursor(){
     std::cout << "\e[?25h";
 }
 
-std::ostream& operator<<(std::ostream& os, const TextColor& cc) {
+std::ostream& Console::operator<<(std::ostream& os, const TextColor& cc) {
     return os << "\e[" << (int)cc.code << "m";
 }
 
