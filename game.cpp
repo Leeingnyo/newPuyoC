@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <iomanip>
 #include <ctime>
 #include <cmath>
@@ -17,14 +17,14 @@
 void Game::DrawFrame(int offset_x, int offset_y){
     std::cout << Console::green;
     std::cout << Console::GotoXY(X(0 + offset_x), Y(0 + offset_y));
-    std::cout << "¦£¦¡¦¡  ¦¡¦¡¦¡¦¤¦£¦¡¦¡¦¡¦¤";
+    std::cout << "â”Œâ”€â”€  â”€â”€â”€â”â”Œâ”€â”€â”€â”";
     for (int i = 1; i < 13; i++){
-        std::cout << Console::GotoXY(X( 0 + offset_x), Y(i + offset_y)) << "¦¢";
-        std::cout << Console::GotoXY(X( 7 + offset_x), Y(i + offset_y)) << "¦¢¦¢";
-        std::cout << Console::GotoXY(X(12 + offset_x), Y(i + offset_y)) << "¦¢";
+        std::cout << Console::GotoXY(X( 0 + offset_x), Y(i + offset_y)) << "â”‚";
+        std::cout << Console::GotoXY(X( 7 + offset_x), Y(i + offset_y)) << "â”‚â”‚";
+        std::cout << Console::GotoXY(X(12 + offset_x), Y(i + offset_y)) << "â”‚";
     }
     std::cout << Console::GotoXY(X(0 + offset_x), Y(13 + offset_y));
-    std::cout << "¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¥¦¦¦¡¦¡¦¡¦¥";
+    std::cout << "â””â”€â”€â”€â”€â”€â”€â”˜â””â”€â”€â”€â”˜";
     std::cout << Console::GotoXY(X( 9 + offset_x), Y( 1 + offset_y)) << " NEXT ";
     std::cout << Console::GotoXY(X( 9 + offset_x), Y( 2 + offset_y)) << "  " << Console::GotoXY(X(11 + offset_x), Y( 2 + offset_y)) << "  ";
     std::cout << Console::GotoXY(X( 9 + offset_x), Y( 3 + offset_y)) << "  " << Console::GotoXY(X(11 + offset_x), Y( 3 + offset_y)) << "  ";
@@ -37,20 +37,20 @@ void Game::DrawFrame(int offset_x, int offset_y){
     /*
         0                   1
         0 1 2 3 4 5 6 7 8 9 0 1 2 
-    00  ¦£¦¡¦¡  ¦¡¦¡¦¡¦¤¦£¦¡¦¡¦¡¦¤ 
-     1  ¦¢            ¦¢¦¢ NEXT ¦¢ 
-     2  ¦¢            ¦¢¦¢      ¦¢ 
-     3  ¦¢            ¦¢¦¢      ¦¢ 
-     4  ¦¢            ¦¢¦¢ Chain¦¢ 
-     5  ¦¢            ¦¢¦¢      ¦¢ 
-     6  ¦¢            ¦¢¦¢MaxChn¦¢ 
-     7  ¦¢            ¦¢¦¢      ¦¢ 
-     8  ¦¢            ¦¢¦¢ Score¦¢ 
-     9  ¦¢            ¦¢¦¢      ¦¢ 
-    10  ¦¢            ¦¢¦¢BGM   ¦¢ 
-     1  ¦¢            ¦¢¦¢ObsNum¦¢ 
-     2  ¦¢            ¦¢¦¢      ¦¢ 
-     3  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¥¦¦¦¡¦¡¦¡¦¥ 
+    00  â”Œâ”€â”€  â”€â”€â”€â”â”Œâ”€â”€â”€â” 
+     1  â”‚            â”‚â”‚ NEXT â”‚ 
+     2  â”‚            â”‚â”‚      â”‚ 
+     3  â”‚            â”‚â”‚      â”‚ 
+     4  â”‚            â”‚â”‚ Chainâ”‚ 
+     5  â”‚            â”‚â”‚      â”‚ 
+     6  â”‚            â”‚â”‚MaxChnâ”‚ 
+     7  â”‚            â”‚â”‚      â”‚ 
+     8  â”‚            â”‚â”‚ Scoreâ”‚ 
+     9  â”‚            â”‚â”‚      â”‚ 
+    10  â”‚            â”‚â”‚BGM   â”‚ 
+     1  â”‚            â”‚â”‚ObsNumâ”‚ 
+     2  â”‚            â”‚â”‚      â”‚ 
+     3  â””â”€â”€â”€â”€â”€â”€â”˜â””â”€â”€â”€â”˜ 
     */
 }
 
@@ -58,7 +58,7 @@ bool SingleGame::GameInit(){
     Console::ScreenClear();
     std::cout << Console::GotoXY(X(0), Y(0));
     
-    // ¹«½¼ »ö? 
+    // ë¬´ìŠ¨ ìƒ‰? 
     puyo_color_random = std::make_shared<WELLRNG512Generator>(rand());
     
     my_board = std::make_shared<Board>();
@@ -138,20 +138,20 @@ void SingleGame::Draw(){
     /*
         0                   1
         0 1 2 3 4 5 6 7 8 9 0 1 2 
-    00  ¦£¦¡¦¡  ¦¡¦¡¦¡¦¤¦£¦¡¦¡¦¡¦¤ 
-     1  ¦¢            ¦¢¦¢ NEXT ¦¢ 
-     2  ¦¢            ¦¢¦¢      ¦¢ 
-     3  ¦¢            ¦¢¦¢      ¦¢ 
-     4  ¦¢            ¦¢¦¢ Chain¦¢ 
-     5  ¦¢            ¦¢¦¢      ¦¢ 
-     6  ¦¢            ¦¢¦¢MaxChn¦¢ 
-     7  ¦¢            ¦¢¦¢      ¦¢ 
-     8  ¦¢            ¦¢¦¢ Score¦¢ 
-     9  ¦¢            ¦¢¦¢      ¦¢ 
-    10  ¦¢            ¦¢¦¢BGM   ¦¢  
-     1  ¦¢            ¦¢¦¢ObsNum¦¢ 
-     2  ¦¢            ¦¢¦¢      ¦¢ 
-     3  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¥¦¦¦¡¦¡¦¡¦¥ 
+    00  â”Œâ”€â”€  â”€â”€â”€â”â”Œâ”€â”€â”€â” 
+     1  â”‚            â”‚â”‚ NEXT â”‚ 
+     2  â”‚            â”‚â”‚      â”‚ 
+     3  â”‚            â”‚â”‚      â”‚ 
+     4  â”‚            â”‚â”‚ Chainâ”‚ 
+     5  â”‚            â”‚â”‚      â”‚ 
+     6  â”‚            â”‚â”‚MaxChnâ”‚ 
+     7  â”‚            â”‚â”‚      â”‚ 
+     8  â”‚            â”‚â”‚ Scoreâ”‚ 
+     9  â”‚            â”‚â”‚      â”‚ 
+    10  â”‚            â”‚â”‚BGM   â”‚  
+     1  â”‚            â”‚â”‚ObsNumâ”‚ 
+     2  â”‚            â”‚â”‚      â”‚ 
+     3  â””â”€â”€â”€â”€â”€â”€â”˜â””â”€â”€â”€â”˜ 
     */
     Game::DrawFrame(0 + offset_x, 0 + offset_y);
     my_board->Draw(1 + offset_x, 1 + offset_y);
@@ -204,21 +204,21 @@ void VSGame::DrawFrame(){
     /*
         0                   1                   2 
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6
-    00  ¦£¦¡¦¡  ¦¡¦¡¦¡¦¤¦£¦¡¦¡¦¡¦¤  ¦£¦¡¦¡  ¦¡¦¡¦¡¦¤¦£¦¡¦¡¦¡¦¤ 
-     1  ¦¢            ¦¢¦¢ NEXT ¦¢  ¦¢            ¦¢¦¢ NEXT ¦¢ 
-     2  ¦¢            ¦¢¦¢      ¦¢  ¦¢            ¦¢¦¢      ¦¢ 
-     3  ¦¢            ¦¢¦¢      ¦¢  ¦¢            ¦¢¦¢      ¦¢ 
-     4  ¦¢            ¦¢¦¢      ¦¢  ¦¢            ¦¢¦¢      ¦¢ 
-     5  ¦¢            ¦¢¦¢ Chain¦¢  ¦¢            ¦¢¦¢ Chain¦¢ 
-     6  ¦¢            ¦¢¦¢      ¦¢  ¦¢            ¦¢¦¢      ¦¢ 
-     7  ¦¢            ¦¢¦¢MaxChn¦¢  ¦¢            ¦¢¦¢MaxChn¦¢ 
-     8  ¦¢            ¦¢¦¢      ¦¢  ¦¢            ¦¢¦¢      ¦¢ 
-     9  ¦¢            ¦¢¦¢ Score¦¢  ¦¢            ¦¢¦¢ Score¦¢ 
-    10  ¦¢            ¦¢¦¢      ¦¢  ¦¢            ¦¢¦¢      ¦¢ 
-     1  ¦¢            ¦¢¦¢BGM   ¦¢  ¦¢            ¦¢¦¢BGM   ¦¢ 
-     2  ¦¢            ¦¢¦¢ObsNum¦¢  ¦¢            ¦¢¦¢ObsNum¦¢ 
-     3  ¦¢            ¦¢¦¢      ¦¢  ¦¢            ¦¢¦¢      ¦¢ 
-     4  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¥¦¦¦¡¦¡¦¡¦¥  ¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¥¦¦¦¡¦¡¦¡¦¥ 
+    00  â”Œâ”€â”€  â”€â”€â”€â”â”Œâ”€â”€â”€â”  â”Œâ”€â”€  â”€â”€â”€â”â”Œâ”€â”€â”€â” 
+     1  â”‚            â”‚â”‚ NEXT â”‚  â”‚            â”‚â”‚ NEXT â”‚ 
+     2  â”‚            â”‚â”‚      â”‚  â”‚            â”‚â”‚      â”‚ 
+     3  â”‚            â”‚â”‚      â”‚  â”‚            â”‚â”‚      â”‚ 
+     4  â”‚            â”‚â”‚      â”‚  â”‚            â”‚â”‚      â”‚ 
+     5  â”‚            â”‚â”‚ Chainâ”‚  â”‚            â”‚â”‚ Chainâ”‚ 
+     6  â”‚            â”‚â”‚      â”‚  â”‚            â”‚â”‚      â”‚ 
+     7  â”‚            â”‚â”‚MaxChnâ”‚  â”‚            â”‚â”‚MaxChnâ”‚ 
+     8  â”‚            â”‚â”‚      â”‚  â”‚            â”‚â”‚      â”‚ 
+     9  â”‚            â”‚â”‚ Scoreâ”‚  â”‚            â”‚â”‚ Scoreâ”‚ 
+    10  â”‚            â”‚â”‚      â”‚  â”‚            â”‚â”‚      â”‚ 
+     1  â”‚            â”‚â”‚BGM   â”‚  â”‚            â”‚â”‚BGM   â”‚ 
+     2  â”‚            â”‚â”‚ObsNumâ”‚  â”‚            â”‚â”‚ObsNumâ”‚ 
+     3  â”‚            â”‚â”‚      â”‚  â”‚            â”‚â”‚      â”‚ 
+     4  â””â”€â”€â”€â”€â”€â”€â”˜â””â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”˜â””â”€â”€â”€â”˜ 
     */
 }
 void VSGame::DrawBoard(){
@@ -230,10 +230,10 @@ bool VSRemoteGame::GameInit(){
     
     Console::ScreenClear();
     std::cout << Console::GotoXY(X(0), X(0));
-    std::cout << "ÇÏ½Ç °ÍÀ» °ñ¶óÁÖ¼¼¿ä" << std::endl;
-    std::cout << "0. µ¹¾Æ°¡±â" << std::endl;
-    std::cout << "1. ¼­¹ö" << std::endl;
-    std::cout << "2. Å¬¶ó" << std::endl;
+    std::cout << "í•˜ì‹¤ ê²ƒì„ ê³¨ë¼ì£¼ì„¸ìš”" << std::endl;
+    std::cout << "0. ëŒì•„ê°€ê¸°" << std::endl;
+    std::cout << "1. ì„œë²„" << std::endl;
+    std::cout << "2. í´ë¼" << std::endl;
     input = getch();
     
     switch (input){
@@ -242,12 +242,12 @@ bool VSRemoteGame::GameInit(){
         case '2': break;
         default: return false;
     }
-    // ¼­¹ö ÀÎÁö Å¬¶ó ÀÎÁö 
-    // ¼­¹ö ÀÏ °æ¿ì ¿¬°áÀ» ¸¸µé°í ÀÚ±â ¾ÆÀÌÇÇ ÁÖ¼Ò¸¦ º¸¿©ÁÜ 
-    // Å¬¶óÀÏ °æ¿ì IP ÁÖ¼Ò ÀÔ·Â¹Ş°Ô ÇÔ 
+    // ì„œë²„ ì¸ì§€ í´ë¼ ì¸ì§€ 
+    // ì„œë²„ ì¼ ê²½ìš° ì—°ê²°ì„ ë§Œë“¤ê³  ìê¸° ì•„ì´í”¼ ì£¼ì†Œë¥¼ ë³´ì—¬ì¤Œ 
+    // í´ë¼ì¼ ê²½ìš° IP ì£¼ì†Œ ì…ë ¥ë°›ê²Œ í•¨ 
     
-    // ¿¬°áµÇ¸é ¾¾µå ÁÖ°í ¹ŞÀ½ 
-    // ¿©·¯ °¡Áö ÀÌ´Ï¼È¶óÀÌÂ¡ 
+    // ì—°ê²°ë˜ë©´ ì”¨ë“œ ì£¼ê³  ë°›ìŒ 
+    // ì—¬ëŸ¬ ê°€ì§€ ì´ë‹ˆì…œë¼ì´ì§• 
     
     Console::ScreenClear();
     std::cout << Console::GotoXY(X(0), X(0));

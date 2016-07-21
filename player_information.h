@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 struct PlayerInformation{
     int score;

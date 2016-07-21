@@ -1,4 +1,4 @@
-
+﻿
 class WELLRNG512Generator {
     unsigned long state[16];
     int index = 0;

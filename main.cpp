@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <iomanip>
 #include <ctime>
 #include <cmath>
@@ -27,11 +27,11 @@ int main(){
         Console::ScreenClear();
         std::cout << Console::GotoXY(X(0), Y(0));
         std::cout << Console::white;
-        std::cout << "¼±ÅÃÇØÁÖ¼¼¿ä" << std::endl;
-        std::cout << "1. È¥ÀÚÇÏ±â" << std::endl;
-        std::cout << "2. µÑÀÌÇÏ±â(°°ÀºÄÄ)" << std::endl;
-        std::cout << "3. µÑÀÌÇÏ±â(¸ÖÆ¼ÇÃ·¹ÀÌ)" << std::endl;
-        std::cout << "4. ³¡³»±â" << std::endl;
+        std::cout << "ì„ íƒí•´ì£¼ì„¸ìš”" << std::endl;
+        std::cout << "1. í˜¼ìží•˜ê¸°" << std::endl;
+        std::cout << "2. ë‘˜ì´í•˜ê¸°(ê°™ì€ì»´)" << std::endl;
+        std::cout << "3. ë‘˜ì´í•˜ê¸°(ë©€í‹°í”Œë ˆì´)" << std::endl;
+        std::cout << "4. ëë‚´ê¸°" << std::endl;
         
         choice = getch();
         switch(choice){

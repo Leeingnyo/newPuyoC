@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 enum class PuyoKind : char { BLANK, AKARI, KYOKO, YUI, CHINATSU, AYANO, CHITOSE, SAKURAKO, HIMAWARI, OBSTACLE, EXPLOSION };
                             // NOTHING, RED, YELLOW, BLACK, PINK, PURPLE, WHITE, BRIGHT BROWN, BLUE, TRANSPARENT, GRAY
@@ -22,22 +22,22 @@ public:
                 std::cout << Console::black << "  ";
                 break;
             case PuyoKind::AKARI:
-                std::cout << Console::red << "¡Ü";
+                std::cout << Console::red << "â—";
                 break;
             case PuyoKind::KYOKO:
-                std::cout << Console::yellow << "¡Ü";
+                std::cout << Console::yellow << "â—";
                 break;
             case PuyoKind::YUI:
-                std::cout << Console::dark_gray << "¡Ü";
+                std::cout << Console::dark_gray << "â—";
                 break;
             case PuyoKind::CHINATSU:
-                std::cout << Console::violet << "¡Ü";
+                std::cout << Console::violet << "â—";
                 break;
             case PuyoKind::OBSTACLE:
-                std::cout << Console::white << "¡Û";
+                std::cout << Console::white << "â—‹";
                 break;
             case PuyoKind::EXPLOSION:
-                std::cout << Console::gray << "¡Ø";
+                std::cout << Console::gray << "â€»";
                 break; 
             default: break;
         }

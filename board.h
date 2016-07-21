@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #define MAP_WIDTH 6
 #define MAP_HEIGHT 13
@@ -106,19 +106,19 @@ public:
                 bipuyo->GetDirection(sub_x, sub_y);
             }
             if (sub_x == 1){
-                // MS ÀÏ¶§ 
-                // ¾Æ¹« ÀÇ¹Ì ¾øÀ½ 
+                // MS ì¼ë•Œ 
+                // ì•„ë¬´ ì˜ë¯¸ ì—†ìŒ 
             } 
             if (sub_y == -1){
-                // À§ÀÏ ¶§ 
+                // ìœ„ì¼ ë•Œ 
                 // |S
                 // |M --> |SM 
-                // ÀÌ¸é ¹Ğ¾î¾ß ÇÔ 
+                // ì´ë©´ ë°€ì–´ì•¼ í•¨ 
                 if (bipuyo_x == 0 || !map[bipuyo_y][bipuyo_x - 1].IsBlank()){
-                    // ±Ùµ¥ 
+                    // ê·¼ë° 
                     // |S|     |M|
                     // |M| --> |S|
-                    // ÀÌ¸é µÚ¹Ù²ã¾ß ÇÔ 
+                    // ì´ë©´ ë’¤ë°”ê¿”ì•¼ í•¨ 
                     if (bipuyo_x == 5 || !map[bipuyo_y][bipuyo_x + 1].IsBlank()){
                         bipuyo_y--;
                         bipuyo->RotateCCW();
@@ -129,24 +129,24 @@ public:
                 }
             }
             if (sub_x == -1){
-                // SM ÀÏ‹š 
+                // SM ì¼ë–„ 
                 //       M
                 // SM -> S
-                // ¹Ù´ÚÀÌ ÀÖÀ¸¸é ÀÌ·¸°Ô 
+                // ë°”ë‹¥ì´ ìˆìœ¼ë©´ ì´ë ‡ê²Œ 
                 if (bipuyo_y == 12 ||  !map[bipuyo_y + 1][bipuyo_x].IsBlank()){
                     bipuyo_y--;
                 }
             }
             if (sub_y == 1){
-                // ¾Æ·¡ÀÏ ¶§ 
+                // ì•„ë˜ì¼ ë•Œ 
                 // M|
                 // S| --> MS| 
-                // ÀÌ¸é ¹Ğ¾î¾ß ÇÔ 
+                // ì´ë©´ ë°€ì–´ì•¼ í•¨ 
                 if (bipuyo_x == 5 || !map[bipuyo_y][bipuyo_x + 1].IsBlank()){
-                    // ±Ùµ¥ 
+                    // ê·¼ë° 
                     // |M|     |S|
                     // |S| --> |M|
-                    // ÀÌ¸é µÚ¹Ù²ã¾ß ÇÔ 
+                    // ì´ë©´ ë’¤ë°”ê¿”ì•¼ í•¨ 
                     if (bipuyo_x == 0 || !map[bipuyo_y][bipuyo_x - 1].IsBlank()){
                         bipuyo_y++;
                         bipuyo->RotateCCW();
@@ -272,11 +272,11 @@ private:
         
         if (chaining_t > CHAINING_FRAME){
             for (auto &chain : chain_list){
-                gain_score += chain.size() * 10 * pow(2, chain_number - 1); // Á¡¼ö °è»ê 
+                gain_score += chain.size() * 10 * pow(2, chain_number - 1); // ì ìˆ˜ ê³„ì‚° 
                 for (auto &pair : chain){
                     map[pair.y][pair.x] = Puyo();
                 }
-                // Å¬¸®¾î 
+                // í´ë¦¬ì–´ 
             }
             chain_list.clear();
             chaining_t = 0;
@@ -298,7 +298,7 @@ private:
             return;
         }
         
-        // ¸Ê ³¡¿¡¼­ ³¡±îÁö 
+        // ë§µ ëì—ì„œ ëê¹Œì§€ 
         bool check[MAP_HEIGHT][MAP_WIDTH] = { false, };
         for (int y = 0; y < MAP_HEIGHT; y++){
             for (int x = 0; x < MAP_WIDTH; x++){
