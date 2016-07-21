@@ -2,8 +2,9 @@
 *.o
 *.out
 
-# Windows
+# Binary
 *.exe
+new_puyo_c
 
 # Dev C++
 *.dev

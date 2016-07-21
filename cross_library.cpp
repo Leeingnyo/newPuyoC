@@ -113,7 +113,7 @@ int getch() {
 }
 
 void Console::Sleep(int t){
-    usleep(t);
+    usleep(t * 1000);
 }
 
 void Console::ScreenClear(){
