@@ -193,7 +193,7 @@ private:
         }
         if (gravity_t++ > GRAVITY_FRAME){
             gravity_t = 0;
-            if (bipuyo_y < 12 && map[bipuyo_y + 1][bipuyo_x].IsBlank() && map[bipuyo_y + sub_y + 1][bipuyo_x + sub_x].IsBlank()){
+            if (bipuyo_y < 12 && map[bipuyo_y + 1][bipuyo_x].IsBlank() && bipuyo_y + sub_y < 12 && map[bipuyo_y + sub_y + 1][bipuyo_x + sub_x].IsBlank()){
                 bipuyo_y++;
             }
             else {
