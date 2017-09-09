@@ -83,7 +83,7 @@ public:
         }
         if (move_t == 0){
             move_t = 1;
-            if (bipuyo_x != 5 && bipuyo_x + sub_x != 5 && map[bipuyo_y][bipuyo_x + 1].IsBlank() && map[bipuyo_y + sub_y][bipuyo_x + sub_x + 1].IsBlank()){
+            if (bipuyo_x != (MAP_WIDTH - 1) && bipuyo_x + sub_x != (MAP_WIDTH - 1) && map[bipuyo_y][bipuyo_x + 1].IsBlank() && map[bipuyo_y + sub_y][bipuyo_x + sub_x + 1].IsBlank()){
                 bipuyo_x++;
             }
         }
@@ -119,7 +119,7 @@ public:
                     // |S|     |M|
                     // |M| --> |S|
                     // 이면 뒤바꿔야 함 
-                    if (bipuyo_x == 5 || !map[bipuyo_y][bipuyo_x + 1].IsBlank()){
+                    if (bipuyo_x == (MAP_WIDTH - 1) || !map[bipuyo_y][bipuyo_x + 1].IsBlank()){
                         bipuyo_y--;
                         bipuyo->RotateCCW();
                     }
@@ -133,7 +133,7 @@ public:
                 //       M
                 // SM -> S
                 // 바닥이 있으면 이렇게 
-                if (bipuyo_y == 12 ||  !map[bipuyo_y + 1][bipuyo_x].IsBlank()){
+                if (bipuyo_y == (MAP_HEIGHT - 1) || !map[bipuyo_y + 1][bipuyo_x].IsBlank()){
                     bipuyo_y--;
                 }
             }
@@ -142,7 +142,7 @@ public:
                 // M|
                 // S| --> MS| 
                 // 이면 밀어야 함 
-                if (bipuyo_x == 5 || !map[bipuyo_y][bipuyo_x + 1].IsBlank()){
+                if (bipuyo_x == (MAP_WIDTH - 1) || !map[bipuyo_y][bipuyo_x + 1].IsBlank()){
                     // 근데 
                     // |M|     |S|
                     // |S| --> |M|
@@ -193,7 +193,7 @@ private:
         }
         if (gravity_t++ > GRAVITY_FRAME){
             gravity_t = 0;
-            if (bipuyo_y < 12 && map[bipuyo_y + 1][bipuyo_x].IsBlank() && bipuyo_y + sub_y < 12 && map[bipuyo_y + sub_y + 1][bipuyo_x + sub_x].IsBlank()){
+            if (bipuyo_y < (MAP_HEIGHT - 1) && map[bipuyo_y + 1][bipuyo_x].IsBlank() && bipuyo_y + sub_y < (MAP_HEIGHT - 1) && map[bipuyo_y + sub_y + 1][bipuyo_x + sub_x].IsBlank()){
                 bipuyo_y++;
             }
             else {
@@ -230,8 +230,8 @@ private:
             return;
         drop_t = 0; 
         bool check = true;
-        for (int i = 12; i > 0; i--){
-            for (int j = 0; j < 6; j++){
+        for (int i = MAP_HEIGHT - 1; i > 0; i--){
+            for (int j = 0; j < MAP_WIDTH; j++){
                 if (map[i][j].IsBlank() && !map[i - 1][j].IsBlank()){
                     map[i][j] = map[i - 1][j];
                     map[i - 1][j] = Puyo();
@@ -306,7 +306,7 @@ private:
                 
                 std::vector<Pair> chain;
                 Chaining(check, chain, x, y);
-                if (chain.size() >= 4){
+                if (chain.size() >= 4){ // FIXME make 4 constant. extract it
                     chaining = true;
                     chain_list.push_back(chain);
                 }
@@ -330,8 +330,8 @@ public:
             bipuyo->Draw(bipuyo_x, bipuyo_y, offset_x, offset_y - 1);
             bipuyo->GetDirection(sub_x, sub_y);
         }
-        for (int i = 1; i < 13; i++){
-            for (int j = 0; j < 6; j++){
+        for (int i = 1; i < MAP_HEIGHT; i++){
+            for (int j = 0; j < MAP_WIDTH; j++){
                 if (bipuyo){
                     if (j == bipuyo_x + sub_x && i == bipuyo_y + sub_y) continue;
                     if (j == bipuyo_x && i == bipuyo_y) continue;
