@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 class PlayerInformation;
+class BiPuyo;
+class BiPuyoGenerator;
 class Board;
 
 class Game {
@@ -11,18 +13,11 @@ public:
 private:
 protected:
     static void DrawFrame(int offset_x, int offset_y);
-    
-    std::shared_ptr<WELLRNG512Generator> puyo_color_random;
-    std::shared_ptr<BiPuyo> GenerateBipuyo(){
-        return std::make_shared<BiPuyo>(
-            static_cast<PuyoKind>(puyo_color_random->Generate() % 4 + 1),
-            static_cast<PuyoKind>(puyo_color_random->Generate() % 4 + 1)
-        );
-    }
 };
 
 class SingleGame : public Game {
     bool gameover = false;
+    std::shared_ptr<BiPuyoGenerator> bipuyo_generator;
     std::shared_ptr<Board> my_board;
     std::shared_ptr<BiPuyo> my_next_bipuyo;
     PlayerInformation my_info;

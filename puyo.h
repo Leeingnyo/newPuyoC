@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+class WELLRNG512Generator;
+
 enum class PuyoKind : char { BLANK, AKARI, KYOKO, YUI, CHINATSU, AYANO, CHITOSE, SAKURAKO, HIMAWARI, OBSTACLE, EXPLOSION };
                             // NOTHING, RED, YELLOW, BLACK, PINK, PURPLE, WHITE, BRIGHT BROWN, BLUE, TRANSPARENT, GRAY
                             // a    b       c       d       e       f       g       h           i       j           k
@@ -122,5 +124,22 @@ public:
             case Direction::LEFT:  { direction = Direction::DOWN; } break;
             default: direction = Direction::UP; break;
         }
+    }
+};
+
+class BiPuyoGenerator {
+    std::shared_ptr<WELLRNG512Generator> puyo_color_random;
+public:
+    BiPuyoGenerator() {
+        puyo_color_random = std::make_shared<WELLRNG512Generator>();
+    }
+    BiPuyoGenerator(int seed) {
+        puyo_color_random = std::make_shared<WELLRNG512Generator>(seed);
+    }
+    std::shared_ptr<BiPuyo> GenerateBipuyo(){
+        return std::make_shared<BiPuyo>(
+            static_cast<PuyoKind>(puyo_color_random->Generate() % 4 + 1),
+            static_cast<PuyoKind>(puyo_color_random->Generate() % 4 + 1)
+        );
     }
 };

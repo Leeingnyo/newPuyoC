@@ -58,13 +58,12 @@ bool SingleGame::GameInit(){
     Console::ScreenClear();
     std::cout << Console::GotoXY(X(0), Y(0));
     
-    // 무슨 색? 
-    puyo_color_random = std::make_shared<WELLRNG512Generator>(rand());
-    
+    // prepare game
+    bipuyo_generator = std::make_shared<BiPuyoGenerator>(); // single game doesn't need sync seed
     my_board = std::make_shared<Board>();
-    my_board->SetNextBiPuyo(GenerateBipuyo());
+    my_board->SetNextBiPuyo(bipuyo_generator->GenerateBipuyo());
     
-    my_next_bipuyo = GenerateBipuyo();
+    my_next_bipuyo = bipuyo_generator->GenerateBipuyo();
     
     std::cout << "Loading..." << std::endl;
     Console::Sleep(500);
@@ -121,7 +120,7 @@ void SingleGame::GameLoop(){
             // need next bipuyo
             my_board->SetNextBiPuyo(my_next_bipuyo);
             // set next bipuyo
-            my_next_bipuyo = GenerateBipuyo();
+            my_next_bipuyo = bipuyo_generator->GenerateBipuyo();
         }
         gameover = my_board->IsGameOver();
         // process
