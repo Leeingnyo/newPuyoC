@@ -10,7 +10,7 @@ public:
     virtual void Draw()=0;
 private:
 protected:
-    void DrawFrame(int offset_x, int offset_y);
+    static void DrawFrame(int offset_x, int offset_y);
     
     std::shared_ptr<WELLRNG512Generator> puyo_color_random;
     std::shared_ptr<BiPuyo> GenerateBipuyo(){
