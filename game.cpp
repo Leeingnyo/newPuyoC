@@ -166,12 +166,15 @@ void SingleGame::Draw(){
 bool VSGame::GameInit(){
     Console::ScreenClear();
     std::cout << Console::GotoXY(X(0), Y(0));
+
+
+
     std::cout << "Loading..." << std::endl;
     Console::Sleep(500);
     return true;
 }
 void VSGame::GameLoop(){
-    while (true) {
+    while (!gameover) {
         
         if (kbhit()){
             int input = getch();
@@ -184,7 +187,7 @@ void VSGame::GameLoop(){
                 << (char)input;
                 
             if (input == 'x'){
-                break;
+                gameover = true;
             }
         }
         
