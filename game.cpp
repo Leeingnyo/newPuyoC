@@ -92,7 +92,7 @@ void SingleGame::GameLoop(){
                         my_board->MoveDown();
                     }
                 } else {
-                    if (input == 'j'){
+                    if (input == 'j' || input == 'h'){
                         my_board->MoveLeft();
                     }
                     if (input == 'l'){
