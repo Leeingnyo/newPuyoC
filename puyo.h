@@ -133,7 +133,7 @@ public:
     BiPuyoGenerator() {
         puyo_color_random = std::make_shared<WELLRNG512Generator>();
     }
-    BiPuyoGenerator(int seed) {
+    BiPuyoGenerator(const int &seed) {
         puyo_color_random = std::make_shared<WELLRNG512Generator>(seed);
     }
     std::shared_ptr<BiPuyo> GenerateBipuyo(){

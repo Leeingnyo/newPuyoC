@@ -8,7 +8,7 @@ class WELLRNG512Generator {
             for (int i = 0; i < 16; i++)
                 state[i] = rand();
         }
-        WELLRNG512Generator(int seed){
+        WELLRNG512Generator(const int &seed){
             srand(seed);
             for (int i = 0; i < 16; i++)
                 state[i] = rand();
