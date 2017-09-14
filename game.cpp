@@ -59,11 +59,10 @@ bool SingleGame::GameInit(){
     std::cout << Console::GotoXY(X(0), Y(0));
     
     // prepare game
-    bipuyo_generator = std::make_shared<BiPuyoGenerator>(); // single game doesn't need sync seed
+    my_bipuyo_generator = std::make_shared<BiPuyoGenerator>(); // single game doesn't need sync seed
     my_board = std::make_shared<Board>();
-    my_board->SetNextBiPuyo(bipuyo_generator->GenerateBipuyo());
-    
-    my_next_bipuyo = bipuyo_generator->GenerateBipuyo();
+    my_board->SetNextBiPuyo(my_bipuyo_generator->GenerateBipuyo());
+    my_next_bipuyo = my_bipuyo_generator->GenerateBipuyo();
     
     std::cout << "Loading..." << std::endl;
     Console::Sleep(500);
@@ -79,7 +78,7 @@ void SingleGame::GameLoop(){
                     input = getch();
                     special = true;
                 }
-                    
+
                 if (special){
                     if (input == 75){
                         my_board->MoveLeft();
@@ -120,7 +119,7 @@ void SingleGame::GameLoop(){
             // need next bipuyo
             my_board->SetNextBiPuyo(my_next_bipuyo);
             // set next bipuyo
-            my_next_bipuyo = bipuyo_generator->GenerateBipuyo();
+            my_next_bipuyo = my_bipuyo_generator->GenerateBipuyo();
         }
         gameover = my_board->IsGameOver();
         // process

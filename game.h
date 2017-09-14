@@ -17,7 +17,7 @@ protected:
 
 class SingleGame : public Game {
     bool gameover = false;
-    std::shared_ptr<BiPuyoGenerator> bipuyo_generator;
+    std::shared_ptr<BiPuyoGenerator> my_bipuyo_generator;
     std::shared_ptr<Board> my_board;
     std::shared_ptr<BiPuyo> my_next_bipuyo;
     PlayerInformation my_info;
