@@ -53,6 +53,25 @@ void Game::DrawFrame(int offset_x, int offset_y){
      3  └──────┘└───┘ 
     */
 }
+void Game::DrawBoard(const std::shared_ptr<Board> &board, int offset_x, int offset_y) {
+    board->Draw(1 + offset_x, 1 + offset_y);
+}
+void Game::DrawNextBiPuyo(const std::shared_ptr<BiPuyo> &bipuyo, int offset_x, int offset_y) {
+    bipuyo->Draw(10 + offset_x, 3 + offset_y);
+}
+void Game::DrawPlayerInformation(const PlayerInformation &info, int offset_x, int offset_y) {
+    std::cout << Console::white;
+    std::cout << Console::GotoXY(X(9 + offset_x), Y(5 + offset_y)) << std::right << std::setw(6) << info.chain_number;
+    std::cout << Console::GotoXY(X(9 + offset_x), Y(7 + offset_y)) << std::right << std::setw(6) << info.max_chain_number;
+    std::cout << Console::GotoXY(X(9 + offset_x), Y(9 + offset_y)) << std::right << std::setw(6) << info.score;
+    std::cout << Console::GotoXY(X(9 + offset_x), Y(12 + offset_y)) << std::right << std::setw(6) << info.obstacle_number_taken;
+}
+void Game::Draw(const std::shared_ptr<Board> &board, const std::shared_ptr<BiPuyo> &bipuyo, const PlayerInformation &info, int offset_x, int offset_y) {
+    Game::DrawFrame(offset_x, offset_y);
+    Game::DrawBoard(board, offset_x, offset_y);
+    Game::DrawNextBiPuyo(bipuyo, offset_x, offset_y);
+    Game::DrawPlayerInformation(info, offset_x, offset_y);
+}
 
 bool SingleGame::GameInit(){
     Console::ScreenClear();
@@ -151,16 +170,7 @@ void SingleGame::Draw(){
      2  │            ││      │ 
      3  └──────┘└───┘ 
     */
-    Game::DrawFrame(0 + offset_x, 0 + offset_y);
-    my_board->Draw(1 + offset_x, 1 + offset_y);
-    my_next_bipuyo->Draw(10 + offset_x, 3 + offset_y);
-    std::cout << Console::white;
-    std::cout << Console::GotoXY(X(9), Y(5)) << std::right << std::setw(6) << my_info.chain_number;
-    std::cout << Console::GotoXY(X(9), Y(7)) << std::right << std::setw(6) << my_info.max_chain_number;
-    std::cout << Console::GotoXY(X(9), Y(9)) << std::right << std::setw(6) << my_info.score;
-    std::cout << Console::GotoXY(X(9), Y(12)) << std::right << std::setw(6) << my_info.obstacle_number_taken;
-    // FIXME 이것도 기본 메소드로 묶기
-    // FIXME 상수들 리터럴 쓰지 말고 모아두기
+    Game::Draw(my_board, my_next_bipuyo, my_info, offset_x, offset_y);
 }
 
 bool VSGame::GameInit(){

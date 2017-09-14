@@ -12,7 +12,11 @@ public:
     virtual void Draw()=0;
 private:
 protected:
-    static void DrawFrame(int offset_x, int offset_y);
+    static void DrawFrame(int offset_x = 0, int offset_y = 0);
+    static void DrawBoard(const std::shared_ptr<Board> &board, int offset_x = 0, int offset_y = 0);
+    static void DrawNextBiPuyo(const std::shared_ptr<BiPuyo> &bipuyo, int offset_x = 0, int offset_y = 0);
+    static void DrawPlayerInformation(const PlayerInformation &info, int offset_x = 0, int offset_y = 0);
+    static void Draw(const std::shared_ptr<Board> &board, const std::shared_ptr<BiPuyo> &bipuyo, const PlayerInformation &info, int offset_x = 0, int offset_y = 0);
 };
 
 class SingleGame : public Game {
