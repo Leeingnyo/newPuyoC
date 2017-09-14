@@ -243,17 +243,13 @@ void VSGame::GameLoop(){
         my_board->Update();
         my_board->UpdatePlayerInformation(my_info);
         if (my_board->IsNeedNext()){
-            // need next bipuyo
             my_board->SetNextBiPuyo(my_next_bipuyo);
-            // set next bipuyo
             my_next_bipuyo = my_bipuyo_generator->GenerateBipuyo();
         }
         other_board->Update();
         other_board->UpdatePlayerInformation(other_info);
         if (other_board->IsNeedNext()){
-            // need next bipuyo
             other_board->SetNextBiPuyo(other_next_bipuyo);
-            // set next bipuyo
             other_next_bipuyo = other_bipuyo_generator->GenerateBipuyo();
         }
         gameover = my_board->IsGameOver() || other_board->IsGameOver();
