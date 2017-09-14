@@ -46,9 +46,6 @@ public:
     virtual bool GameInit();
     virtual void GameLoop();
     virtual void Draw();
-private:
-    void DrawFrame();
-    void DrawBoard();
 };
 
 class VSRemoteGame : public VSGame {

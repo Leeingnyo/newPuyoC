@@ -264,15 +264,6 @@ void VSGame::GameLoop(){
     }
 }
 void VSGame::Draw(){
-    DrawFrame();
-    DrawBoard();
-}
-void VSGame::DrawFrame(){
-    Game::DrawFrame(0, 0);
-    for (int i = 0; i <= 14; i++){
-        std::cout << Console::GotoXY(X(13), Y(i)) << "  ";
-    }
-    Game::DrawFrame(14, 0);
     /*
         0                   1                   2 
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6
@@ -292,25 +283,11 @@ void VSGame::DrawFrame(){
      3  │            ││      │  │            ││      │ 
      4  └──────┘└───┘  └──────┘└───┘ 
     */
-}
-void VSGame::DrawBoard(){
-    int offset_x = 0, offset_y = 0;
-    my_board->Draw(1 + offset_x, 1 + offset_y);
-    my_next_bipuyo->Draw(10 + offset_x, 3 + offset_y);
-    std::cout << Console::white;
-    std::cout << Console::GotoXY(X(9), Y(5)) << std::right << std::setw(6) << my_info.chain_number;
-    std::cout << Console::GotoXY(X(9), Y(7)) << std::right << std::setw(6) << my_info.max_chain_number;
-    std::cout << Console::GotoXY(X(9), Y(9)) << std::right << std::setw(6) << my_info.score;
-    std::cout << Console::GotoXY(X(9), Y(12)) << std::right << std::setw(6) << my_info.obstacle_number_taken;
-    
-    offset_x = 14;
-    other_board->Draw(1 + offset_x, 1 + offset_y);
-    other_next_bipuyo->Draw(10 + offset_x, 3 + offset_y);
-    std::cout << Console::white;
-    std::cout << Console::GotoXY(X(9 + offset_x), Y(5 + offset_y)) << std::right << std::setw(6) << other_info.chain_number;
-    std::cout << Console::GotoXY(X(9 + offset_x), Y(7 + offset_y)) << std::right << std::setw(6) << other_info.max_chain_number;
-    std::cout << Console::GotoXY(X(9 + offset_x), Y(9 + offset_y)) << std::right << std::setw(6) << other_info.score;
-    std::cout << Console::GotoXY(X(9 + offset_x), Y(12 + offset_y)) << std::right << std::setw(6) << other_info.obstacle_number_taken;
+    Game::Draw(my_board, my_next_bipuyo, my_info);
+    for (int i = 0; i <= 14; i++){
+        std::cout << Console::GotoXY(X(13), Y(i)) << "  ";
+    }
+    Game::Draw(other_board, other_next_bipuyo, other_info, 14);
 }
 
 bool VSRemoteGame::GameInit(){
