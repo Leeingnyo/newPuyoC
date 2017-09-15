@@ -243,6 +243,7 @@ private:
         }
         if (check) {
             state = State::CHAINING;
+            drop_predelay_t = 0;
         }
     }
     
