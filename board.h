@@ -17,6 +17,7 @@ class Board {
     
     int gain_score;
     int chain_number;
+    int obstacle_number_taken;
     int obstacle_number_to_send;
     
     const int GRAVITY_FRAME = 35;
@@ -42,6 +43,7 @@ public:
     Board() {
         gain_score = 0;
         chain_number = 0;
+        obstacle_number_taken = 0;
         obstacle_number_to_send = 0;
         
         gravity_t = 0;
@@ -172,7 +174,7 @@ public:
         info.chain_number = chain_number;
         if (info.max_chain_number < chain_number)
             info.max_chain_number = chain_number;
-        info.obstacle_number_to_send += obstacle_number_to_send;
+        info.obstacle_number_taken += obstacle_number_taken;
         obstacle_number_to_send = 0;
     }
     
