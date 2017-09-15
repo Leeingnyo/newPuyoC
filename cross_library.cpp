@@ -6,11 +6,11 @@
 
 #include "cross_library.h"
 
-void Console::Sleep(int t){
+void Console::Sleep(int t) {
     ::Sleep(t);
 }
 
-void Console::CursorView(bool show){
+void Console::CursorView(bool show) {
     HANDLE hConsole;
     CONSOLE_CURSOR_INFO ConsoleCursor;
 
@@ -22,14 +22,14 @@ void Console::CursorView(bool show){
     SetConsoleCursorInfo(hConsole , &ConsoleCursor);
 }
 
-void Console::ScreenClear(){
+void Console::ScreenClear() {
     system("cls");
 }
 
-void Console::HideCursor(){
+void Console::HideCursor() {
     Console::CursorView(false);
 }
-void Console::ShowCursor(){
+void Console::ShowCursor() {
     Console::CursorView(true);
 }
 
@@ -55,7 +55,7 @@ Console::TextColor Console::violet(Code::VIOLET);
 Console::TextColor Console::yellow(Code::YELLOW);
 Console::TextColor Console::white(Code::WHITE);
 
-std::ostream& Console::operator<<(std::ostream& os, const GotoXY& gotoxy){
+std::ostream& Console::operator<<(std::ostream& os, const GotoXY& gotoxy) {
     COORD pos = {gotoxy.x, gotoxy.y};
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos); 
     return os;
@@ -112,18 +112,18 @@ int getch() {
     return ch;
 }
 
-void Console::Sleep(int t){
+void Console::Sleep(int t) {
     usleep(t * 1000);
 }
 
-void Console::ScreenClear(){
+void Console::ScreenClear() {
     std::cout << "\e[2J\e[H";
 }
 
-void Console::HideCursor(){
+void Console::HideCursor() {
     std::cout << "\e[?25l";
 }
-void Console::ShowCursor(){
+void Console::ShowCursor() {
     std::cout << "\e[?25h";
 }
 
@@ -148,7 +148,7 @@ Console::TextColor Console::violet(Code::VIOLET);
 Console::TextColor Console::yellow(Code::YELLOW);
 Console::TextColor Console::white(Code::WHITE);
 
-std::ostream& Console::operator<<(std::ostream& os, const GotoXY& gotoxy){
+std::ostream& Console::operator<<(std::ostream& os, const GotoXY& gotoxy) {
     return os << "\e[" << gotoxy.y + 1 << ";" << gotoxy.x + 1 << "f";
 }
 

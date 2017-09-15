@@ -6,7 +6,7 @@
 #include "WELLRNG512Gen.h"
 
 // WELLRNG512GeneratorTest
-int main(){
+int main() {
     printf("test start\n");
     { // same seed
         WELLRNG512Generator a(1);

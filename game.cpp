@@ -14,11 +14,11 @@
 #include "board.h"
 #include "game.h"
 
-void Game::DrawFrame(int offset_x, int offset_y){
+void Game::DrawFrame(int offset_x, int offset_y) {
     std::cout << Console::green;
     std::cout << Console::GotoXY(X(0 + offset_x), Y(0 + offset_y));
     std::cout << "┌──  ───┐┌───┐";
-    for (int i = 1; i < 13; i++){
+    for (int i = 1; i < 13; i++) {
         std::cout << Console::GotoXY(X( 0 + offset_x), Y(i + offset_y)) << "│";
         std::cout << Console::GotoXY(X( 7 + offset_x), Y(i + offset_y)) << "││";
         std::cout << Console::GotoXY(X(12 + offset_x), Y(i + offset_y)) << "│";
@@ -73,7 +73,7 @@ void Game::Draw(const std::shared_ptr<Board> &board, const std::shared_ptr<BiPuy
     Game::DrawPlayerInformation(info, offset_x, offset_y);
 }
 
-bool SingleGame::GameInit(){
+bool SingleGame::GameInit() {
     Console::ScreenClear();
     std::cout << Console::GotoXY(X(0), Y(0));
     
@@ -87,10 +87,10 @@ bool SingleGame::GameInit(){
     Console::Sleep(500);
     return true;
 }
-void SingleGame::GameLoop(){
+void SingleGame::GameLoop() {
     while (!gameover) {
-        if (!my_board->IsBusy()){
-            if (kbhit()){
+        if (!my_board->IsBusy()) {
+            if (kbhit()) {
                 int input = getch();
                 bool special = false;
                 if (input == 224) {
@@ -98,30 +98,30 @@ void SingleGame::GameLoop(){
                     special = true;
                 }
 
-                if (special){
-                    if (input == 75){
+                if (special) {
+                    if (input == 75) {
                         my_board->MoveLeft();
                     }
-                    if (input == 77){
+                    if (input == 77) {
                         my_board->MoveRight();
                     }
-                    if (input == 80){
+                    if (input == 80) {
                         my_board->MoveDown();
                     }
                 } else {
-                    if (input == 'j' || input == 'h'){
+                    if (input == 'j' || input == 'h') {
                         my_board->MoveLeft();
                     }
-                    if (input == 'l'){
+                    if (input == 'l') {
                         my_board->MoveRight();
                     }
-                    if (input == 'k'){
+                    if (input == 'k') {
                         my_board->MoveDown();
                     }
-                    if (input == '-'){
+                    if (input == '-') {
                         break;
                     }
-                    if (input == 'z'){ // rotate
+                    if (input == 'z') { // rotate
                         my_board->RotateCCW();
                     }
                 }
@@ -134,7 +134,7 @@ void SingleGame::GameLoop(){
         
         my_board->Update();
         my_board->UpdatePlayerInformation(my_info);
-        if (my_board->IsNeedNext()){
+        if (my_board->IsNeedNext()) {
             // need next bipuyo
             my_board->SetNextBiPuyo(my_next_bipuyo);
             // set next bipuyo
@@ -149,7 +149,7 @@ void SingleGame::GameLoop(){
         Console::Sleep(16); // ?
     }
 }
-void SingleGame::Draw(){
+void SingleGame::Draw() {
     int offset_x = 0;
     int offset_y = 0;
     /*
@@ -173,7 +173,7 @@ void SingleGame::Draw(){
     Game::Draw(my_board, my_next_bipuyo, my_info, offset_x, offset_y);
 }
 
-bool VSGame::GameInit(){
+bool VSGame::GameInit() {
     Console::ScreenClear();
     std::cout << Console::GotoXY(X(0), Y(0));
 
@@ -192,10 +192,10 @@ bool VSGame::GameInit(){
     Console::Sleep(500);
     return true;
 }
-void VSGame::GameLoop(){
+void VSGame::GameLoop() {
     while (!gameover) {
         
-        if (kbhit()){
+        if (kbhit()) {
             int input = getch();
             bool special = false;
             if (input == 224) {
@@ -204,35 +204,35 @@ void VSGame::GameLoop(){
             }
 
             if (!my_board->IsBusy()) {
-                if (special){ }
+                if (special) { }
                 else {
-                    if (input == 'd'){
+                    if (input == 'd') {
                         my_board->MoveLeft();
                     }
-                    if (input == 'g'){
+                    if (input == 'g') {
                         my_board->MoveRight();
                     }
-                    if (input == 'f'){
+                    if (input == 'f') {
                         my_board->MoveDown();
                     }
-                    if (input == 'z'){ // rotate
+                    if (input == 'z') { // rotate
                         my_board->RotateCCW();
                     }
                 }
             }
             if (!other_board->IsBusy()) {
-                if (special){ }
+                if (special) { }
                 else {
-                    if (input == 'l'){
+                    if (input == 'l') {
                         other_board->MoveLeft();
                     }
-                    if (input == '\''){
+                    if (input == '\'') {
                         other_board->MoveRight();
                     }
-                    if (input == ';'){
+                    if (input == ';') {
                         other_board->MoveDown();
                     }
-                    if (input == 'm'){
+                    if (input == 'm') {
                         other_board->RotateCCW();
                     }
                 }
@@ -242,13 +242,13 @@ void VSGame::GameLoop(){
         
         my_board->Update();
         my_board->UpdatePlayerInformation(my_info);
-        if (my_board->IsNeedNext()){
+        if (my_board->IsNeedNext()) {
             my_board->SetNextBiPuyo(my_next_bipuyo);
             my_next_bipuyo = my_bipuyo_generator->GenerateBipuyo();
         }
         other_board->Update();
         other_board->UpdatePlayerInformation(other_info);
-        if (other_board->IsNeedNext()){
+        if (other_board->IsNeedNext()) {
             other_board->SetNextBiPuyo(other_next_bipuyo);
             other_next_bipuyo = other_bipuyo_generator->GenerateBipuyo();
         }
@@ -259,7 +259,7 @@ void VSGame::GameLoop(){
         Console::Sleep(16);
     }
 }
-void VSGame::Draw(){
+void VSGame::Draw() {
     /*
         0                   1                   2 
         0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6
@@ -280,13 +280,13 @@ void VSGame::Draw(){
      4  └──────┘└───┘  └──────┘└───┘ 
     */
     Game::Draw(my_board, my_next_bipuyo, my_info);
-    for (int i = 0; i <= 14; i++){
+    for (int i = 0; i <= 14; i++) {
         std::cout << Console::GotoXY(X(13), Y(i)) << "  ";
     }
     Game::Draw(other_board, other_next_bipuyo, other_info, 14);
 }
 
-bool VSRemoteGame::GameInit(){
+bool VSRemoteGame::GameInit() {
     int input;
     
     Console::ScreenClear();
@@ -297,7 +297,7 @@ bool VSRemoteGame::GameInit(){
     std::cout << "2. 클라" << std::endl;
     input = getch();
     
-    switch (input){
+    switch (input) {
         case '0': return false;
         case '1': break;
         case '2': break;
@@ -316,11 +316,11 @@ bool VSRemoteGame::GameInit(){
     Console::Sleep(500);
     return true;
 }
-void VSRemoteGame::GameLoop(){
+void VSRemoteGame::GameLoop() {
     while (true) {
         // recv
         
-        if (kbhit()){
+        if (kbhit()) {
             int input = getch();
             bool special = false;
             if (input == 224) {
@@ -330,7 +330,7 @@ void VSRemoteGame::GameLoop(){
             std::cout << Console::GotoXY(X(0), Y(15))
                 << (char)input;
                 
-            if (input == 'x'){
+            if (input == 'x') {
                 break;
             }
         }
@@ -341,6 +341,6 @@ void VSRemoteGame::GameLoop(){
         // send
     }
 }
-void VSRemoteGame::Draw(){
+void VSRemoteGame::Draw() {
     VSGame::Draw();
 }

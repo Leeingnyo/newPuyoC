@@ -96,8 +96,8 @@ namespace Console {
     class GotoXY {
         int x, y;
     public:
-        GotoXY(){ x = y = 0; }
-        GotoXY(int x, int y){ this->x = x; this->y = y; }
+        GotoXY() { x = y = 0; }
+        GotoXY(int x, int y) { this->x = x; this->y = y; }
         
         friend std::ostream& operator<<(std::ostream& os, const GotoXY& gotoxy);
     };

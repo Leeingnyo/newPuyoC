@@ -3,17 +3,17 @@ class WELLRNG512Generator {
     unsigned long state[16];
     int index = 0;
     public:
-        WELLRNG512Generator(){
+        WELLRNG512Generator() {
             srand(time(NULL));
             for (int i = 0; i < 16; i++)
                 state[i] = rand();
         }
-        WELLRNG512Generator(const int &seed){
+        WELLRNG512Generator(const int &seed) {
             srand(seed);
             for (int i = 0; i < 16; i++)
                 state[i] = rand();
         }
-        unsigned long Generate(){
+        unsigned long Generate() {
             // http://www.gamedevforever.com/114
             unsigned long a, b, c, d;
             a = state[index];

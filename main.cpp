@@ -14,13 +14,13 @@
 #include "board.h"
 #include "game.h"
 
-int main(){
+int main() {
     srand(time(NULL));
     Console::ScreenClear();
     Console::HideCursor();
     
     bool app_alive = true;
-    while (app_alive){
+    while (app_alive) {
         int choice;
         std::shared_ptr<Game> game;
         
@@ -34,7 +34,7 @@ int main(){
         std::cout << "4. 끝내기" << std::endl;
         
         choice = getch();
-        switch(choice){
+        switch(choice) {
             case '1': {
                 game = std::make_shared<SingleGame>();
             }   break;

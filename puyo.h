@@ -9,17 +9,17 @@ enum class PuyoKind : char { BLANK, AKARI, KYOKO, YUI, CHINATSU, AYANO, CHITOSE,
 class Puyo {
     PuyoKind puyo;
 public:
-    Puyo(){
+    Puyo() {
         puyo = PuyoKind::BLANK;
     }
-    Puyo(PuyoKind puyo){
+    Puyo(PuyoKind puyo) {
         this->puyo = puyo; 
     }
-    Puyo(const Puyo& puyo){
+    Puyo(const Puyo& puyo) {
         this->puyo = puyo.puyo;
     }
-    void Draw(){
-        switch (puyo){
+    void Draw() {
+        switch (puyo) {
             case PuyoKind::BLANK:
                 std::cout << Console::black << "  ";
                 break;
@@ -44,20 +44,20 @@ public:
             default: break;
         }
     }
-    bool IsSameColor(const Puyo& other){
+    bool IsSameColor(const Puyo& other) {
         return puyo == other.puyo;
     }
-    int ToInt(){
+    int ToInt() {
         return static_cast<int>(puyo);
     }
-    char Serialize(){
+    char Serialize() {
         return 'a' + static_cast<char>(puyo);
     }
-    void Deserialize(char c){
+    void Deserialize(char c) {
         c -= 'a';
         puyo = static_cast<PuyoKind>(c);
     }
-    bool IsBlank(){
+    bool IsBlank() {
         return puyo == PuyoKind::BLANK;
     }
 };
@@ -67,17 +67,17 @@ class BiPuyo {
     Puyo main;
     Puyo sub;
     Direction direction = Direction::UP;
-    BiPuyo(){ }
+    BiPuyo() { }
 public:
     BiPuyo(PuyoKind main, PuyoKind sub) : main(main), sub(sub) { }
-    Puyo GetMain(){
+    Puyo GetMain() {
         return main;
     }
-    Puyo GetSub(){
+    Puyo GetSub() {
         return sub;
     }
-    void GetDirection(int &x, int &y){
-        switch (direction){
+    void GetDirection(int &x, int &y) {
+        switch (direction) {
             case Direction::UP:    { x = 0; y = -1; } break;
             case Direction::RIGHT: { x = 1; y = 0; } break;
             case Direction::DOWN:  { x = 0; y = 1; } break;
@@ -85,7 +85,7 @@ public:
             default: { x = 0; y = -1; } break;
         }
     }
-    void Draw(int offset_x, int offset_y){
+    void Draw(int offset_x, int offset_y) {
         int x, y;
         GetDirection(x, y);
         std::cout << Console::GotoXY(X(offset_x), Y(offset_y));
@@ -93,21 +93,21 @@ public:
         std::cout << Console::GotoXY(X(offset_x + x), Y(offset_y + y));
         sub.Draw();
     }
-    void Draw(int x, int y, int offset_x, int offset_y){
+    void Draw(int x, int y, int offset_x, int offset_y) {
         int sub_x, sub_y;
         GetDirection(sub_x, sub_y);
-        if (y > 0){
+        if (y > 0) {
             std::cout << Console::GotoXY(X(x + offset_x), Y(y + offset_y));
             main.Draw();
         }
-        if (y + sub_y > 0){
+        if (y + sub_y > 0) {
             std::cout << Console::GotoXY(X(x + offset_x + sub_x), Y(y + offset_y + sub_y));
             sub.Draw();
         }
     }
-    void RotateCW(){
+    void RotateCW() {
         // Rotate ClockWise
-        switch (direction){
+        switch (direction) {
             case Direction::UP:    { direction = Direction::RIGHT; } break;
             case Direction::RIGHT: { direction = Direction::DOWN; } break;
             case Direction::DOWN:  { direction = Direction::LEFT; } break;
@@ -115,9 +115,9 @@ public:
             default: direction = Direction::UP; break;
         }
     }
-    void RotateCCW(){
+    void RotateCCW() {
         // Rotate CounterClockWise
-        switch (direction){
+        switch (direction) {
             case Direction::UP:    { direction = Direction::LEFT; } break;
             case Direction::RIGHT: { direction = Direction::UP; } break;
             case Direction::DOWN:  { direction = Direction::RIGHT; } break;
@@ -136,7 +136,7 @@ public:
     BiPuyoGenerator(const int &seed) {
         puyo_color_random = std::make_shared<WELLRNG512Generator>(seed);
     }
-    std::shared_ptr<BiPuyo> GenerateBipuyo(){
+    std::shared_ptr<BiPuyo> GenerateBipuyo() {
         return std::make_shared<BiPuyo>(
             static_cast<PuyoKind>(puyo_color_random->Generate() % 4 + 1),
             static_cast<PuyoKind>(puyo_color_random->Generate() % 4 + 1)

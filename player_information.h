@@ -7,7 +7,7 @@ struct PlayerInformation{
     int obstacle_number_taken;
     int obstacle_number_to_send;
 
-    PlayerInformation(){
+    PlayerInformation() {
         this->score = 0;
         this->chain_number = 0;
         this->max_chain_number = 0;

@@ -39,7 +39,7 @@ class Board {
     const int CHAINING_FRAME = 30;
     int chaining_t;
 public:
-    Board(){
+    Board() {
         gain_score = 0;
         chain_number = 0;
         obstacle_number_to_send = 0;
@@ -54,43 +54,43 @@ public:
         
         state = State::IDLE;
     }
-    bool IsBusy(){
+    bool IsBusy() {
         return state != State::IDLE;
     }
-    bool IsNeedNext(){
+    bool IsNeedNext() {
         return state == State::NEED_NEXT;
     }
-    bool IsGameOver(){
+    bool IsGameOver() {
         return state == State::GAMEOVER;
     }
     
-    void MoveLeft(){
+    void MoveLeft() {
         int sub_x = 0, sub_y = 0;
-        if (bipuyo){
+        if (bipuyo) {
             bipuyo->GetDirection(sub_x, sub_y);
         }
-        if (move_t == 0){
+        if (move_t == 0) {
             move_t = 1;
-            if (bipuyo_x != 0 && bipuyo_x + sub_x != 0 && map[bipuyo_y][bipuyo_x - 1].IsBlank() && map[bipuyo_y + sub_y][bipuyo_x + sub_x - 1].IsBlank()){
+            if (bipuyo_x != 0 && bipuyo_x + sub_x != 0 && map[bipuyo_y][bipuyo_x - 1].IsBlank() && map[bipuyo_y + sub_y][bipuyo_x + sub_x - 1].IsBlank()) {
                 bipuyo_x--;
             }
         }
     }
-    void MoveRight(){
+    void MoveRight() {
         int sub_x = 0, sub_y = 0;
-        if (bipuyo){
+        if (bipuyo) {
             bipuyo->GetDirection(sub_x, sub_y);
         }
-        if (move_t == 0){
+        if (move_t == 0) {
             move_t = 1;
-            if (bipuyo_x != (MAP_WIDTH - 1) && bipuyo_x + sub_x != (MAP_WIDTH - 1) && map[bipuyo_y][bipuyo_x + 1].IsBlank() && map[bipuyo_y + sub_y][bipuyo_x + sub_x + 1].IsBlank()){
+            if (bipuyo_x != (MAP_WIDTH - 1) && bipuyo_x + sub_x != (MAP_WIDTH - 1) && map[bipuyo_y][bipuyo_x + 1].IsBlank() && map[bipuyo_y + sub_y][bipuyo_x + sub_x + 1].IsBlank()) {
                 bipuyo_x++;
             }
         }
     }
-    void MoveDown(){
+    void MoveDown() {
         int sub_x = 0, sub_y = 0;
-        if (bipuyo){
+        if (bipuyo) {
             bipuyo->GetDirection(sub_x, sub_y);
         }
         if (down_t == 0) {
@@ -98,28 +98,28 @@ public:
             gravity_t += 40;
         }
     }
-    void RotateCCW(){
+    void RotateCCW() {
         if (rotate_t == 0) {
             rotate_t = 1;
             int sub_x = 0, sub_y = 0;
-            if (bipuyo){
+            if (bipuyo) {
                 bipuyo->GetDirection(sub_x, sub_y);
             }
-            if (sub_x == 1){
+            if (sub_x == 1) {
                 // MS 일때 
                 // 아무 의미 없음 
             } 
-            if (sub_y == -1){
+            if (sub_y == -1) {
                 // 위일 때 
                 // |S
                 // |M --> |SM 
                 // 이면 밀어야 함 
-                if (bipuyo_x == 0 || !map[bipuyo_y][bipuyo_x - 1].IsBlank()){
+                if (bipuyo_x == 0 || !map[bipuyo_y][bipuyo_x - 1].IsBlank()) {
                     // 근데 
                     // |S|     |M|
                     // |M| --> |S|
                     // 이면 뒤바꿔야 함 
-                    if (bipuyo_x == (MAP_WIDTH - 1) || !map[bipuyo_y][bipuyo_x + 1].IsBlank()){
+                    if (bipuyo_x == (MAP_WIDTH - 1) || !map[bipuyo_y][bipuyo_x + 1].IsBlank()) {
                         bipuyo_y--;
                         bipuyo->RotateCCW();
                     }
@@ -128,26 +128,26 @@ public:
                     }
                 }
             }
-            if (sub_x == -1){
+            if (sub_x == -1) {
                 // SM 일떄 
                 //       M
                 // SM -> S
                 // 바닥이 있으면 이렇게 
-                if (bipuyo_y == (MAP_HEIGHT - 1) || !map[bipuyo_y + 1][bipuyo_x].IsBlank()){
+                if (bipuyo_y == (MAP_HEIGHT - 1) || !map[bipuyo_y + 1][bipuyo_x].IsBlank()) {
                     bipuyo_y--;
                 }
             }
-            if (sub_y == 1){
+            if (sub_y == 1) {
                 // 아래일 때 
                 // M|
                 // S| --> MS| 
                 // 이면 밀어야 함 
-                if (bipuyo_x == (MAP_WIDTH - 1) || !map[bipuyo_y][bipuyo_x + 1].IsBlank()){
+                if (bipuyo_x == (MAP_WIDTH - 1) || !map[bipuyo_y][bipuyo_x + 1].IsBlank()) {
                     // 근데 
                     // |M|     |S|
                     // |S| --> |M|
                     // 이면 뒤바꿔야 함 
-                    if (bipuyo_x == 0 || !map[bipuyo_y][bipuyo_x - 1].IsBlank()){
+                    if (bipuyo_x == 0 || !map[bipuyo_y][bipuyo_x - 1].IsBlank()) {
                         bipuyo_y++;
                         bipuyo->RotateCCW();
                     }
@@ -160,13 +160,13 @@ public:
         }
     }
     
-    void SetNextBiPuyo(const std::shared_ptr<BiPuyo>& next){
+    void SetNextBiPuyo(const std::shared_ptr<BiPuyo>& next) {
         bipuyo = next;
         bipuyo_x = 2;
         bipuyo_y = 1;
         state = State::IDLE;
     }
-    void UpdatePlayerInformation(PlayerInformation &info){
+    void UpdatePlayerInformation(PlayerInformation &info) {
         info.score += gain_score;
         gain_score = 0;
         info.chain_number = chain_number;
@@ -176,8 +176,8 @@ public:
         obstacle_number_to_send = 0;
     }
     
-    void Update(){
-        switch (state){
+    void Update() {
+        switch (state) {
             case State::IDLE: IdleUpdate(); break;
             case State::DROP: DropUpdate(); break;
             case State::CHAINING: ChainingUpdate(); break;
@@ -186,14 +186,14 @@ public:
         }
     }
 private:
-    void IdleUpdate(){
+    void IdleUpdate() {
         int sub_x = 0, sub_y = 0;
-        if (bipuyo){
+        if (bipuyo) {
             bipuyo->GetDirection(sub_x, sub_y);
         }
-        if (gravity_t++ > GRAVITY_FRAME){
+        if (gravity_t++ > GRAVITY_FRAME) {
             gravity_t = 0;
-            if (bipuyo_y < (MAP_HEIGHT - 1) && map[bipuyo_y + 1][bipuyo_x].IsBlank() && bipuyo_y + sub_y < (MAP_HEIGHT - 1) && map[bipuyo_y + sub_y + 1][bipuyo_x + sub_x].IsBlank()){
+            if (bipuyo_y < (MAP_HEIGHT - 1) && map[bipuyo_y + 1][bipuyo_x].IsBlank() && bipuyo_y + sub_y < (MAP_HEIGHT - 1) && map[bipuyo_y + sub_y + 1][bipuyo_x + sub_x].IsBlank()) {
                 bipuyo_y++;
             }
             else {
@@ -204,42 +204,42 @@ private:
                 state = State::DROP;
             }
         }
-        if (rotate_t > ROTATE_FRAME){
+        if (rotate_t > ROTATE_FRAME) {
             rotate_t = 0;
         }
-        else if (rotate_t > 0){
+        else if (rotate_t > 0) {
             rotate_t++;
         }
-        if (move_t > MOVE_FRAME){
+        if (move_t > MOVE_FRAME) {
             move_t = 0;
         }
-        else if (move_t > 0){
+        else if (move_t > 0) {
             move_t++;
         }
-        if (down_t > DOWN_FRAME){
+        if (down_t > DOWN_FRAME) {
             down_t = 0;
         }
-        else if (down_t > 0){
+        else if (down_t > 0) {
             down_t++;
         }
     }
-    void DropUpdate(){
+    void DropUpdate() {
         if (drop_predelay_t++ < DROP_PREDELAY)
             return;
         if (drop_t++ < DROP_FRAME)
             return;
         drop_t = 0; 
         bool check = true;
-        for (int i = MAP_HEIGHT - 1; i > 0; i--){
-            for (int j = 0; j < MAP_WIDTH; j++){
-                if (map[i][j].IsBlank() && !map[i - 1][j].IsBlank()){
+        for (int i = MAP_HEIGHT - 1; i > 0; i--) {
+            for (int j = 0; j < MAP_WIDTH; j++) {
+                if (map[i][j].IsBlank() && !map[i - 1][j].IsBlank()) {
                     map[i][j] = map[i - 1][j];
                     map[i - 1][j] = Puyo();
                     check = false;
                 }
             }
         }
-        if (check){
+        if (check) {
             state = State::CHAINING;
         }
     }
@@ -247,13 +247,13 @@ private:
     class Pair {
     public:
         int x; int y;
-        Pair(int x, int y){
+        Pair(int x, int y) {
             this->x = x;
             this->y = y;
         }
     };
-    void Chaining(bool (&check)[MAP_HEIGHT][MAP_WIDTH], std::vector<Pair> &chain, int x, int y){
-        if (!check[y][x]){
+    void Chaining(bool (&check)[MAP_HEIGHT][MAP_WIDTH], std::vector<Pair> &chain, int x, int y) {
+        if (!check[y][x]) {
             chain.push_back(Pair(x, y));
             check[y][x] = true;
             if (y > 0 && map[y - 1][x].IsSameColor(map[y][x]))
@@ -266,14 +266,14 @@ private:
                 Chaining(check, chain, x + 1, y);
         }
     }
-    void ChainingUpdate(){
+    void ChainingUpdate() {
         bool chaining = false;
         static std::vector<std::vector<Pair>> chain_list;
         
-        if (chaining_t > CHAINING_FRAME){
-            for (auto &chain : chain_list){
+        if (chaining_t > CHAINING_FRAME) {
+            for (auto &chain : chain_list) {
                 gain_score += chain.size() * 10 * pow(2, chain_number - 1); // 점수 계산 
-                for (auto &pair : chain){
+                for (auto &pair : chain) {
                     map[pair.y][pair.x] = Puyo();
                 }
                 // 클리어 
@@ -283,14 +283,14 @@ private:
             state = State::DROP;
             return;
         }
-        else if (chaining_t > CHAINING_FRAME * 2 / 3){
+        else if (chaining_t > CHAINING_FRAME * 2 / 3) {
             chaining_t++;
             return;
         }
-        else if (chaining_t > 0){
+        else if (chaining_t > 0) {
             Puyo effect = Puyo(chaining_t / 4 % 2 ? PuyoKind::EXPLOSION : PuyoKind::BLANK);
-            for (auto &chain : chain_list){
-                for (auto &pair : chain){
+            for (auto &chain : chain_list) {
+                for (auto &pair : chain) {
                     map[pair.y][pair.x] = effect;
                 }
             }
@@ -300,20 +300,20 @@ private:
         
         // 맵 끝에서 끝까지 
         bool check[MAP_HEIGHT][MAP_WIDTH] = { false, };
-        for (int y = 0; y < MAP_HEIGHT; y++){
-            for (int x = 0; x < MAP_WIDTH; x++){
+        for (int y = 0; y < MAP_HEIGHT; y++) {
+            for (int x = 0; x < MAP_WIDTH; x++) {
                 if (map[y][x].IsBlank()) continue;
                 
                 std::vector<Pair> chain;
                 Chaining(check, chain, x, y);
-                if (chain.size() >= 4){ // FIXME make 4 constant. extract it
+                if (chain.size() >= 4) { // FIXME make 4 constant. extract it
                     chaining = true;
                     chain_list.push_back(chain);
                 }
             }
         }
         
-        if (chaining){
+        if (chaining) {
             chaining_t = 1;
             chain_number++;
         }
@@ -324,15 +324,15 @@ private:
         }
     }
 public:
-    void Draw(int offset_x, int offset_y){
+    void Draw(int offset_x, int offset_y) {
         int sub_x = 0, sub_y = 0;
-        if (bipuyo){
+        if (bipuyo) {
             bipuyo->Draw(bipuyo_x, bipuyo_y, offset_x, offset_y - 1);
             bipuyo->GetDirection(sub_x, sub_y);
         }
-        for (int i = 1; i < MAP_HEIGHT; i++){
-            for (int j = 0; j < MAP_WIDTH; j++){
-                if (bipuyo){
+        for (int i = 1; i < MAP_HEIGHT; i++) {
+            for (int j = 0; j < MAP_WIDTH; j++) {
+                if (bipuyo) {
                     if (j == bipuyo_x + sub_x && i == bipuyo_y + sub_y) continue;
                     if (j == bipuyo_x && i == bipuyo_y) continue;
                 }
@@ -342,11 +342,10 @@ public:
         }
     }
     
-    std::string Serialize(){
+    std::string Serialize() {
         std::string data;
         return data;
     }
-    void Deserialize(std::string data){
-        
+    void Deserialize(std::string data) {
     }
 };
