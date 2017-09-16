@@ -60,6 +60,9 @@ public:
     bool IsBlank() {
         return puyo == PuyoKind::BLANK;
     }
+    bool IsObstacle() {
+        return puyo == PuyoKind::OBSTACLE;
+    }
 };
 
 class BiPuyo {

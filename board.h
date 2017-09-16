@@ -330,6 +330,7 @@ private:
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
                 if (map[y][x].IsBlank()) continue;
+                if (map[y][x].IsObstacle()) continue;
                 
                 std::vector<Pair> chain;
                 Chaining(check, chain, x, y);
