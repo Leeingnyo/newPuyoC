@@ -235,23 +235,32 @@ private:
             down_t++;
         }
     }
-    void DropUpdate() {
-        if (drop_predelay_t++ < DROP_PREDELAY)
-            return;
-        if (drop_t++ < DROP_FRAME)
-            return;
-        drop_t = 0; 
-        bool check = true;
+
+    /*
+     * return true when board status is changed
+     */
+    bool ShiftDown() {
+        bool isChanged = false;
         for (int i = MAP_HEIGHT - 1; i > 0; i--) {
             for (int j = 0; j < MAP_WIDTH; j++) {
                 if (map[i][j].IsBlank() && !map[i - 1][j].IsBlank()) {
                     map[i][j] = map[i - 1][j];
                     map[i - 1][j] = Puyo();
-                    check = false;
+                    isChanged = true;
                 }
             }
         }
-        if (check) {
+        return isChanged;
+    }
+
+    void DropUpdate() {
+        if (drop_predelay_t++ < DROP_PREDELAY)
+            return;
+        if (drop_t++ < DROP_FRAME)
+            return;
+        drop_t = 0;
+        bool isChanged = ShiftDown();
+        if (!isChanged) {
             state = State::CHAINING;
             drop_predelay_t = 0;
         }
