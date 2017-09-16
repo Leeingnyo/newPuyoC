@@ -274,23 +274,28 @@ private:
             this->y = y;
         }
     };
-    void Chaining(bool (&check)[MAP_HEIGHT][MAP_WIDTH], std::vector<Pair> &chain, int x, int y) {
+    void Chaining(bool (&check)[MAP_HEIGHT][MAP_WIDTH], std::vector<Pair> &chain, std::vector<Pair> &nearby_obstacles, int x, int y) {
         if (!check[y][x]) {
-            chain.push_back(Pair(x, y));
             check[y][x] = true;
-            if (y > 0 && map[y - 1][x].IsSameColor(map[y][x]))
-                Chaining(check, chain, x, y - 1);
-            if (x > 0 && map[y][x - 1].IsSameColor(map[y][x]))
-                Chaining(check, chain, x - 1, y);
-            if (y + 1 < MAP_HEIGHT && map[y + 1][x].IsSameColor(map[y][x]))
-                Chaining(check, chain, x, y + 1);
-            if (x + 1 < MAP_WIDTH && map[y][x + 1].IsSameColor(map[y][x]))
-                Chaining(check, chain, x + 1, y);
+            if (map[y][x].IsObstacle()) {
+                nearby_obstacles.push_back(Pair(x, y));
+                return;
+            }
+            chain.push_back(Pair(x, y));
+            if (y > 0 && (map[y - 1][x].IsSameColor(map[y][x]) || map[y - 1][x].IsObstacle()))
+                Chaining(check, chain, nearby_obstacles, x, y - 1);
+            if (x > 0 && (map[y][x - 1].IsSameColor(map[y][x]) || map[y][x - 1].IsObstacle()))
+                Chaining(check, chain, nearby_obstacles, x - 1, y);
+            if (y + 1 < MAP_HEIGHT && (map[y + 1][x].IsSameColor(map[y][x]) || map[y + 1][x].IsObstacle()))
+                Chaining(check, chain, nearby_obstacles, x, y + 1);
+            if (x + 1 < MAP_WIDTH && (map[y][x + 1].IsSameColor(map[y][x]) || map[y][x + 1].IsObstacle()))
+                Chaining(check, chain, nearby_obstacles, x + 1, y);
         }
     }
     void ChainingUpdate() {
         bool chaining = false;
         static std::vector<std::vector<Pair>> chain_list;
+        static std::vector<Pair> removed_obstacles;
         
         if (chaining_t > CHAINING_FRAME) {
             for (auto &chain : chain_list) {
@@ -303,9 +308,12 @@ private:
                 for (auto &pair : chain) {
                     map[pair.y][pair.x] = Puyo();
                 }
-                // 클리어 
+            }
+            for (auto &pair : removed_obstacles) {
+                map[pair.y][pair.x] = Puyo();
             }
             chain_list.clear();
+            removed_obstacles.clear();
             chaining_t = 0;
             state = State::DROP;
             return;
@@ -321,6 +329,9 @@ private:
                     map[pair.y][pair.x] = effect;
                 }
             }
+            for (auto &pair : removed_obstacles) {
+                map[pair.y][pair.x] = effect;
+            }
             chaining_t++;
             return;
         }
@@ -333,10 +344,12 @@ private:
                 if (map[y][x].IsObstacle()) continue;
                 
                 std::vector<Pair> chain;
-                Chaining(check, chain, x, y);
+                std::vector<Pair> nearby_obstacles;
+                Chaining(check, chain, nearby_obstacles, x, y);
                 if (chain.size() >= 4) { // FIXME make 4 constant. extract it
                     chaining = true;
                     chain_list.push_back(chain);
+                    removed_obstacles.insert(removed_obstacles.end(), nearby_obstacles.begin(), nearby_obstacles.end());
                 }
             }
         }
