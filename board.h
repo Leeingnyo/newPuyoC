@@ -3,7 +3,8 @@
 #define MAP_WIDTH 6
 #define MAP_HEIGHT 13
 
-class WELLRNG512Generator;
+class Puyo;
+class BiPuyo;
 class Game;
 
 class Board {
@@ -20,7 +21,6 @@ class Board {
     int chain_number;
     int obstacle_number_taken;
     int obstacle_number_to_send;
-    WELLRNG512Generator obstacle_position_generator;
     
     const int GRAVITY_FRAME = 35;
     int gravity_t;
@@ -351,7 +351,59 @@ private:
         }
     }
     void DropObstacleUpdate() {
-        state = State::NEED_NEXT;
+        static bool isProgressed = false;
+        if (!isProgressed) {
+            if (obstacle_number_taken > 0) {
+                isProgressed = true;
+            }
+            else {
+                state = State::NEED_NEXT;
+                return;
+            }
+        }
+        if (drop_predelay_t++ < DROP_PREDELAY)
+            return;
+        if (drop_t++ < DROP_FRAME)
+            return;
+        drop_t = 0;
+        // generate obstacles at empty top of map
+        if (obstacle_number_taken > 0) {
+            bool empty[MAP_WIDTH] = { false, };
+            for (int i = 0; i < MAP_WIDTH; i++) {
+                empty[i] = map[0][i].IsBlank();
+            }
+            std::vector<int> empty_position;
+            for (int i = 0; i < MAP_WIDTH; i++) {
+                if (empty[i]) {
+                    empty_position.push_back(i);
+                }
+            }
+            int empty_number = empty_position.size();
+            if (obstacle_number_taken >= empty_number) {
+                for (auto position : empty_position) {
+                    map[0][position] = Puyo(PuyoKind::OBSTACLE);
+                }
+                obstacle_number_taken -= empty_number;
+            } else {
+                if (empty_number > 0) {
+                    std::random_shuffle(empty_position.begin(), empty_position.end());
+                    for (int i = 0; i < obstacle_number_taken; i++) {
+                        map[0][empty_position[i]] = Puyo(PuyoKind::OBSTACLE);
+                    }
+                    obstacle_number_taken = 0;
+                }
+            }
+        }
+        // shift down
+        bool isChanged = ShiftDown();
+        // no more move
+        if (!isChanged) {
+            isProgressed = false;
+            drop_predelay_t = 0;
+            if (map[1][2].IsBlank()) state = State::NEED_NEXT;
+            else state = State::GAMEOVER;
+            return;
+        }
     }
 public:
     void Draw(int offset_x, int offset_y) {

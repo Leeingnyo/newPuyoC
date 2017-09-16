@@ -4,6 +4,7 @@
 #include <cmath>
 #include <memory>
 #include <vector>
+#include <algorithm>
 
 #include "common.h"
 #include "cross_library.h"
