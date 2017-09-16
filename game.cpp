@@ -194,7 +194,6 @@ bool VSGame::GameInit() {
 }
 void VSGame::GameLoop() {
     while (!gameover) {
-        
         if (kbhit()) {
             int input = getch();
             bool special = false;
@@ -246,12 +245,14 @@ void VSGame::GameLoop() {
             my_board->SetNextBiPuyo(my_next_bipuyo);
             my_next_bipuyo = my_bipuyo_generator->GenerateBipuyo();
         }
+        other_board->TakeObstacles(my_board->SendObstacles());
         other_board->Update();
         other_board->UpdatePlayerInformation(other_info);
         if (other_board->IsNeedNext()) {
             other_board->SetNextBiPuyo(other_next_bipuyo);
             other_next_bipuyo = other_bipuyo_generator->GenerateBipuyo();
         }
+        my_board->TakeObstacles(other_board->SendObstacles());
         gameover = my_board->IsGameOver() || other_board->IsGameOver();
         // process
         

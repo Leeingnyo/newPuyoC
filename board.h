@@ -3,10 +3,11 @@
 #define MAP_WIDTH 6
 #define MAP_HEIGHT 13
 
+class WELLRNG512Generator;
 class Game;
 
 class Board {
-    enum class State { IDLE, DROP, CHAINING, NEED_NEXT, HALT, GAMEOVER };
+    enum class State { IDLE, DROP, CHAINING, DROP_OBSTACLE, NEED_NEXT, HALT, GAMEOVER };
     Puyo map[MAP_HEIGHT][MAP_WIDTH];
     std::shared_ptr<BiPuyo> bipuyo;
     int bipuyo_x, bipuyo_y;
@@ -19,6 +20,7 @@ class Board {
     int chain_number;
     int obstacle_number_taken;
     int obstacle_number_to_send;
+    WELLRNG512Generator obstacle_position_generator;
     
     const int GRAVITY_FRAME = 35;
     int gravity_t;
@@ -174,8 +176,15 @@ public:
         info.chain_number = chain_number;
         if (info.max_chain_number < chain_number)
             info.max_chain_number = chain_number;
-        info.obstacle_number_taken += obstacle_number_taken;
-        obstacle_number_to_send = 0;
+        info.obstacle_number_taken = obstacle_number_taken;
+    }
+    void TakeObstacles(int obstacle_number_taken) {
+        this->obstacle_number_taken += obstacle_number_taken;
+    }
+    int SendObstacles() {
+        int obstacle_number_to_send = this->obstacle_number_to_send;
+        this->obstacle_number_to_send = 0;
+        return obstacle_number_to_send;
     }
     
     void Update() {
@@ -183,6 +192,7 @@ public:
             case State::IDLE: IdleUpdate(); break;
             case State::DROP: DropUpdate(); break;
             case State::CHAINING: ChainingUpdate(); break;
+            case State::DROP_OBSTACLE: DropObstacleUpdate(); break;
             case State::NEED_NEXT: break;
             default: { state = State::HALT; } break;
         }
@@ -276,6 +286,11 @@ private:
         if (chaining_t > CHAINING_FRAME) {
             for (auto &chain : chain_list) {
                 gain_score += chain.size() * 10 * pow(2, chain_number - 1); // 점수 계산 
+                obstacle_number_to_send += pow(2, chain_number) - 1;
+                while (obstacle_number_taken > 0 && obstacle_number_to_send > 0) {
+                    obstacle_number_taken -= 1;
+                    obstacle_number_to_send -= 1;
+                }
                 for (auto &pair : chain) {
                     map[pair.y][pair.x] = Puyo();
                 }
@@ -322,9 +337,12 @@ private:
         }
         else {
             chain_number = 0;
-            if (map[1][2].IsBlank()) state = State::NEED_NEXT;
+            if (map[1][2].IsBlank()) state = State::DROP_OBSTACLE;
             else state = State::GAMEOVER;
         }
+    }
+    void DropObstacleUpdate() {
+        state = State::NEED_NEXT;
     }
 public:
     void Draw(int offset_x, int offset_y) {
