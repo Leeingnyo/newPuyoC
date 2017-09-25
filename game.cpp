@@ -6,8 +6,13 @@
 #include <vector>
 #include <algorithm>
 
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+
 #include "common.h"
 #include "cross_library.h"
+#include "cross_socket.h"
 #include "WELLRNG512Gen.h"
 
 #include "player_information.h"
@@ -290,7 +295,7 @@ void VSGame::Draw() {
 
 bool VSRemoteGame::GameInit() {
     int input;
-    
+
     Console::ScreenClear();
     std::cout << Console::GotoXY(X(0), X(0));
     std::cout << "하실 것을 골라주세요" << std::endl;
@@ -298,20 +303,76 @@ bool VSRemoteGame::GameInit() {
     std::cout << "1. 서버" << std::endl;
     std::cout << "2. 클라" << std::endl;
     input = getch();
-    
+
     switch (input) {
         case '0': return false;
         case '1': break;
         case '2': break;
         default: return false;
     }
-    // 서버 인지 클라 인지 
-    // 서버 일 경우 연결을 만들고 자기 아이피 주소를 보여줌 
-    // 클라일 경우 IP 주소 입력받게 함 
-    
-    // 연결되면 씨드 주고 받음 
-    // 여러 가지 이니셜라이징 
-    
+
+    Console::ScreenClear();
+    // 서버 인지 클라 인지
+    std::shared_ptr<Socket> socket;
+    if (input == '1') {
+        socket = std::make_shared<ServerSocket>();
+        auto server_socket = std::dynamic_pointer_cast<ServerSocket>(socket);
+        // 서버 일 경우 연결을 만들고 자기 아이피 주소를 보여줌
+        std::cout << Console::white
+            << "안녕하세요. 당신은 서버 역할입니다." << std::endl
+            << "클라이언트 역할의 분께 당신의 IP를 알려드려야 합니다." << std::endl
+            << "혹시 공유기를 사용하시고 계시다면 포트 포워딩이 필요합니다." << std::endl
+            << "ip는 http://www.myipaddress.com/show-my-ip-address/ 나" << std::endl
+            << "shell 에서 (linux, MaxOS) ifconfig 명령어, 혹은 (Windows) ipconfig 명령어 를 사용하시면 됩니다." << std::endl
+            << "포트는 9595를 사용하므로 열려있으면 닫아주세요" << std::endl;
+        if (server_socket->Bind("0.0.0.0", 9595)) {
+            std::cout << Console::red
+                << "9595 포트에 Bind 실패했습니다. 이미 사용 중인지 확인해주세요." << std::endl
+                << "3초 뒤 화면으로 돌아갑니다." << std::endl;
+            Console::Sleep(3000);
+            return false;
+        }
+        if (server_socket->Listen(5)) {
+            std::cout << Console::red
+                << "Listen 실패했습니다." << std::endl
+                << "3초 뒤 화면으로 돌아갑니다." << std::endl;
+            Console::Sleep(3000);
+            return false;
+        }
+        if (server_socket->Accept()) {
+            std::cout << Console::red
+                << "Accept 실패했습니다." << std::endl
+                << "3초 뒤 화면으로 돌아갑니다." << std::endl;
+            Console::Sleep(3000);
+            return false;
+        }
+
+        int seed = rand();
+
+    }
+    else {
+        socket = std::make_shared<ClientSocket>();
+        auto client_socket = std::dynamic_pointer_cast<ClientSocket>(socket);
+        // 클라일 경우 IP 주소 입력받게 함
+        std::string ip_address;
+        std::cout << Console::white
+            << "안녕하세요. 당신은 클라이언트 역할입니다." << std::endl
+            << "서버 역할의 분께서 당신에게 IP를 알려드릴 겁니다." << std::endl
+            << "그것을 입력해주시기 바랍니다." << std::endl
+            << "예시) 127.0.0.1" << std::endl;
+        std::cin >> ip_address;
+        if (client_socket->Connect(ip_address, 9595)) {
+            std::cout << Console::red
+                << "Connect 실패했습니다. 올바른 IP인지 확인해주세요." << std::endl
+                << "3초 뒤 화면으로 돌아갑니다." << std::endl;
+            Console::Sleep(3000);
+            return false;
+        }
+    }
+
+    // 연결되면 씨드 주고 받음
+    // 여러 가지 이니셜라이징
+
     Console::ScreenClear();
     std::cout << Console::GotoXY(X(0), X(0));
     std::cout << "Loading..." << std::endl;
