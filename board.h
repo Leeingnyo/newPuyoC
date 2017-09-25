@@ -13,9 +13,18 @@ class Board {
     std::shared_ptr<BiPuyo> bipuyo;
     int bipuyo_x, bipuyo_y;
     
-    std::weak_ptr<Game> game;
-    
     State state;
+    /*
+      State Machine
+      IDLE - (bipuyo meets floor or other puby) -> DROP
+      DROP - (no puyo in the air) -> CHAINING
+      CHAINING - (puyo in air) -> DROP
+      CHAINING - (no more chain, no more drop) -> DROP_OBSTACLE
+      CHAINING - (2,1) -> GAMEOVER
+      DROP_OBSTACLE - (no obstacles or drop all) -> NEED_NEXT
+      DROP_OBSTACLE - (2,1) -> GAMEOVER
+      NEED_NEXT - (take next bipuyo) -> IDLE
+    */
     
     int gain_score;
     int chain_number;

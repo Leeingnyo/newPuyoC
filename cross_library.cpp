@@ -153,4 +153,3 @@ std::ostream& Console::operator<<(std::ostream& os, const GotoXY& gotoxy) {
 }
 
 #endif
-
