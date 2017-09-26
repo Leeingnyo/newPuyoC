@@ -128,6 +128,19 @@ public:
             default: direction = Direction::UP; break;
         }
     }
+
+    std::string Serialize() {
+        std::ostringstream data;
+        data << main.Serialize();
+        data << sub.Serialize();
+        data << static_cast<int>(direction);
+        return data.str();
+    }
+    void Deserialize(std::string data) {
+        main.Deserialize(data.at(0));
+        sub.Deserialize(data.at(1));
+        direction = static_cast<Direction>(data.at(2) - '0');
+    }
 };
 
 class BiPuyoGenerator {
@@ -144,5 +157,8 @@ public:
             static_cast<PuyoKind>(puyo_color_random->Generate() % 4 + 1),
             static_cast<PuyoKind>(puyo_color_random->Generate() % 4 + 1)
         );
+    }
+    static std::shared_ptr<BiPuyo> GenerateEmptyBipuyo() {
+        return std::make_shared<BiPuyo>(PuyoKind::BLANK, PuyoKind::BLANK);
     }
 };

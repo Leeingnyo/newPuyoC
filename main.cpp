@@ -1,13 +1,19 @@
 ﻿#include <iostream>
 #include <iomanip>
+#include <sstream>
 #include <ctime>
 #include <cmath>
 #include <memory>
 #include <vector>
 #include <algorithm>
 
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+
 #include "common.h"
 #include "cross_library.h"
+#include "cross_socket.h"
 #include "WELLRNG512Gen.h"
 
 #include "player_information.h"

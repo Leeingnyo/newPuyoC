@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <iomanip>
+#include <sstream>
 #include <ctime>
 #include <cmath>
 #include <memory>
@@ -313,7 +314,7 @@ bool VSRemoteGame::GameInit() {
 
     Console::ScreenClear();
     // 서버 인지 클라 인지
-    std::shared_ptr<Socket> socket;
+    int seed;
     if (input == '1') {
         socket = std::make_shared<ServerSocket>();
         auto server_socket = std::dynamic_pointer_cast<ServerSocket>(socket);
@@ -347,8 +348,9 @@ bool VSRemoteGame::GameInit() {
             return false;
         }
 
-        int seed = rand();
-
+        int generated_seed = rand();
+        server_socket->Send(std::to_string(generated_seed));
+        seed = generated_seed;
     }
     else {
         socket = std::make_shared<ClientSocket>();
@@ -368,9 +370,17 @@ bool VSRemoteGame::GameInit() {
             Console::Sleep(3000);
             return false;
         }
+        seed = std::stoi(client_socket->Recv());
     }
 
-    // 연결되면 씨드 주고 받음
+    my_bipuyo_generator = std::make_shared<BiPuyoGenerator>(seed);
+    my_board = std::make_shared<Board>();
+    my_board->SetNextBiPuyo(my_bipuyo_generator->GenerateBipuyo());
+    my_next_bipuyo = my_bipuyo_generator->GenerateBipuyo();
+
+    other_board = std::make_shared<Board>();
+    other_board->SetNextBiPuyo(BiPuyoGenerator::GenerateEmptyBipuyo());
+    other_next_bipuyo = BiPuyoGenerator::GenerateEmptyBipuyo();
     // 여러 가지 이니셜라이징
 
     Console::ScreenClear();
@@ -380,30 +390,151 @@ bool VSRemoteGame::GameInit() {
     return true;
 }
 void VSRemoteGame::GameLoop() {
+    if (socket->Send(this->Serialize()) < 0) {
+        std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
+        Console::Sleep(1000);
+        return;
+    };
+
+    int a = 0;
+
     while (true) {
-        // recv
-        
-        if (kbhit()) {
-            int input = getch();
-            bool special = false;
-            if (input == 224) {
-                input = getch();
-                special = true;
-            }
-            std::cout << Console::GotoXY(X(0), Y(15))
-                << (char)input;
-                
-            if (input == 'x') {
-                break;
+        try {
+            this->Deserialize(socket->Recv());
+        }
+        catch (const int& error) {
+            std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
+            Console::Sleep(1000);
+            return;
+        }
+
+        if (!my_board->IsBusy()) {
+            if (kbhit()) {
+                int input = getch();
+                bool special = false;
+                if (input == 224) {
+                    input = getch();
+                    special = true;
+                }
+
+                if (special) {
+                    if (input == 75) {
+                        my_board->MoveLeft();
+                    }
+                    if (input == 77) {
+                        my_board->MoveRight();
+                    }
+                    if (input == 80) {
+                        my_board->MoveDown();
+                    }
+                } else {
+                    if (input == 'j' || input == 'h') {
+                        my_board->MoveLeft();
+                    }
+                    if (input == 'l') {
+                        my_board->MoveRight();
+                    }
+                    if (input == 'k') {
+                        my_board->MoveDown();
+                    }
+                    if (input == '-') {
+                        break;
+                    }
+                    if (input == 'z') { // rotate
+                        my_board->RotateCCW();
+                    }
+                }
             }
         }
+        else {
+            if (kbhit()) getch();
+        }
+        // input
         
+        my_board->Update();
+        my_board->UpdatePlayerInformation(my_info);
+        if (my_board->IsNeedNext()) {
+            // need next bipuyo
+            my_board->SetNextBiPuyo(my_next_bipuyo);
+            // set next bipuyo
+            my_next_bipuyo = my_bipuyo_generator->GenerateBipuyo();
+        }
+        if (other_board->IsNeedNext()) {
+            other_board->SetNextBiPuyo(BiPuyoGenerator::GenerateEmptyBipuyo());
+        }
+        gameover = my_board->IsGameOver();
+        // process
+
         Draw();
         Console::Sleep(16); // ?
-        
-        // send
+
+        if (socket->Send(this->Serialize()) < 0) {
+            std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
+            Console::Sleep(1000);
+        }
     }
+
+    socket->Close();
 }
 void VSRemoteGame::Draw() {
     VSGame::Draw();
+}
+std::string VSRemoteGame::Serialize() {
+    std::ostringstream data;
+    data
+        << "G{"
+            << "P{" << my_info.Serialize() << "}"
+            << "M{" << my_board->Serialize() << "}"
+            << "B{" << my_next_bipuyo->Serialize() << "}"
+        << "}";
+    return data.str();
+}
+void VSRemoteGame::Deserialize(std::string data) {
+    int state = 0;
+    std::ostringstream buffer;
+    for (int i = 0; i < data.length(); i++) {
+        char token = data.at(i);
+        switch (state) {
+            case 0: {
+                if (token == 'G') continue;
+                if (token == '{') state = 1;
+            } break;
+            case 1: {
+                if (token == 'P') continue;
+                if (token == '{') continue;
+                if (token == '}') {
+                    other_info.Deserialize(buffer.str());
+                    buffer.str("");
+                    state = 2;
+                    continue;
+                }
+                buffer << token;
+            } break;
+            case 2: {
+                if (token == 'M') continue;
+                if (token == '{') continue;
+                if (token == '}') {
+                    other_board->Deserialize(buffer.str());
+                    buffer.str("");
+                    state = 3;
+                    continue;
+                }
+                buffer << token;
+            } break;
+            case 3: {
+                if (token == 'B') continue;
+                if (token == '{') continue;
+                if (token == '}') {
+                    other_next_bipuyo->Deserialize(buffer.str());
+                    buffer.str("");
+                    state = 4;
+                    continue;
+                }
+                buffer << token;
+            } break;
+            case 4: {
+                continue;
+            } break;
+        }
+    }
 }

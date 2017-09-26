@@ -68,6 +68,16 @@ int ServerSocket::Recv(char *buffer) {
 int ServerSocket::Send(char *buffer) {
     return send(your_socket, buffer, strlen(buffer) + 1, 0); // with NULL
 }
+std::string ServerSocket::Recv() {
+    char buffer[BUFF_SIZE + 5];
+    if (recv(your_socket, buffer, BUFF_SIZE, 0) < 0) {
+        throw -1;
+    }
+    return std::string(buffer);
+}
+int ServerSocket::Send(std::string data) {
+    return send(your_socket, data.c_str(), data.length() + 1, 0);
+}
 
 void ServerSocket::Close() {
     CloseClient();
@@ -94,6 +104,16 @@ int ClientSocket::Recv(char *buffer) {
 }
 int ClientSocket::Send(char *buffer) {
     return send(my_socket, buffer, strlen(buffer) + 1, 0); // with NULL
+}
+std::string ClientSocket::Recv() {
+    char buffer[BUFF_SIZE + 5];
+    if (recv(my_socket, buffer, BUFF_SIZE, 0) < 0) {
+        throw -1;
+    }
+    return std::string(buffer);
+}
+int ClientSocket::Send(std::string data) {
+    return send(my_socket, data.c_str(), data.length() + 1, 0);
 }
 
 #endif

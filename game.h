@@ -32,12 +32,13 @@ public:
 };
 
 class VSGame : public Game {
+protected:
     bool gameover = false;
     std::shared_ptr<BiPuyoGenerator> my_bipuyo_generator;
     std::shared_ptr<Board> my_board;
     std::shared_ptr<BiPuyo> my_next_bipuyo;
     PlayerInformation my_info;
-    // FIXME 이 넷은 게임 State 뭐 이런 걸로 묶는 건 어떨까
+
     std::shared_ptr<BiPuyoGenerator> other_bipuyo_generator;
     std::shared_ptr<Board> other_board;
     std::shared_ptr<BiPuyo> other_next_bipuyo;
@@ -49,11 +50,14 @@ public:
 };
 
 class VSRemoteGame : public VSGame {
-    bool gameover = false;
+    std::shared_ptr<Socket> socket;
 public:
     virtual bool GameInit();
     virtual void GameLoop();
     virtual void Draw();
+
+    std::string Serialize();
+    void Deserialize(std::string data);
 };
 
 class AIGame : public VSGame {

@@ -18,6 +18,8 @@ public:
     bool IsInvalid();
     virtual int Recv(char *buffer)=0;
     virtual int Send(char *buffer)=0;
+    virtual std::string Recv()=0;
+    virtual int Send(std::string data)=0;
     virtual void Close();
 };
 
@@ -29,6 +31,8 @@ public:
     void CloseClient();
     virtual int Recv(char *buffer);
     virtual int Send(char *buffer);
+    virtual std::string Recv();
+    virtual int Send(std::string data);
     virtual void Close();
 };
 
@@ -37,4 +41,6 @@ public:
     int Connect(std::string ip_address, int port);
     virtual int Recv(char *buffer);
     virtual int Send(char *buffer);
+    virtual std::string Recv();
+    virtual int Send(std::string data);
 };

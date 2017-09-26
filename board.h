@@ -16,7 +16,7 @@ class Board {
     State state;
     /*
       State Machine
-      IDLE - (bipuyo meets floor or other puby) -> DROP
+      IDLE - (bipuyo meets floor or other puyo) -> DROP
       DROP - (no puyo in the air) -> CHAINING
       CHAINING - (puyo in air) -> DROP
       CHAINING - (no more chain, no more drop) -> DROP_OBSTACLE
@@ -448,9 +448,47 @@ public:
     }
     
     std::string Serialize() {
-        std::string data;
-        return data;
+        std::ostringstream data;
+        for (int i = 0; i < MAP_HEIGHT; i++) {
+            for (int j = 0; j < MAP_WIDTH; j++) {
+                data << map[i][j].Serialize();
+            }
+        }
+        if (bipuyo) {
+            data << bipuyo->Serialize();
+            data << bipuyo_x << " ";
+            data << bipuyo_y;
+        }
+        return data.str();
     }
     void Deserialize(std::string data) {
+        std::cout << Console::GotoXY(0, 20) << "                                                                                             ";
+        std::cout << Console::GotoXY(0, 20) << data;
+        std::cout << Console::GotoXY(0, 21) << data.length() << MAP_HEIGHT * MAP_WIDTH;
+        std::cout << Console::GotoXY(0, 22) << "    ";
+        for (int i = 0; i < MAP_HEIGHT; i++) {
+            for (int j = 0; j < MAP_WIDTH; j++) {
+                map[i][j].Deserialize(data.at(i * MAP_WIDTH + j));
+            }
+        }
+        if (data.length() > MAP_HEIGHT * MAP_WIDTH) {
+            if (bipuyo) {
+                bipuyo = BiPuyoGenerator::GenerateEmptyBipuyo();
+            }
+            std::cout << Console::GotoXY(0, 22) << "fuxk";
+            bipuyo->Deserialize(data.substr(MAP_HEIGHT * MAP_WIDTH, 3));
+
+            std::string buf;
+            std::stringstream ss(data.substr(MAP_HEIGHT * MAP_WIDTH + 3));
+            std::vector<std::string> tokens;
+            while (ss >> buf)
+                tokens.push_back(buf);
+            bipuyo_x = std::stoi(tokens[0]);
+            bipuyo_y = std::stoi(tokens[1]);
+        }
+        else {
+            std::cout << Console::GotoXY(0, 22) << "some";
+            state = State::NEED_NEXT;
+        }
     }
 };
