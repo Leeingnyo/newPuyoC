@@ -462,10 +462,6 @@ public:
         return data.str();
     }
     void Deserialize(std::string data) {
-        std::cout << Console::GotoXY(0, 20) << "                                                                                             ";
-        std::cout << Console::GotoXY(0, 20) << data;
-        std::cout << Console::GotoXY(0, 21) << data.length() << MAP_HEIGHT * MAP_WIDTH;
-        std::cout << Console::GotoXY(0, 22) << "    ";
         for (int i = 0; i < MAP_HEIGHT; i++) {
             for (int j = 0; j < MAP_WIDTH; j++) {
                 map[i][j].Deserialize(data.at(i * MAP_WIDTH + j));
@@ -475,7 +471,6 @@ public:
             if (bipuyo) {
                 bipuyo = BiPuyoGenerator::GenerateEmptyBipuyo();
             }
-            std::cout << Console::GotoXY(0, 22) << "fuxk";
             bipuyo->Deserialize(data.substr(MAP_HEIGHT * MAP_WIDTH, 3));
 
             std::string buf;
@@ -487,7 +482,6 @@ public:
             bipuyo_y = std::stoi(tokens[1]);
         }
         else {
-            std::cout << Console::GotoXY(0, 22) << "some";
             state = State::NEED_NEXT;
         }
     }
