@@ -484,5 +484,8 @@ public:
         else {
             state = State::NEED_NEXT;
         }
+        if (!map[1][2].IsBlank()) {
+            state = State::GAMEOVER;
+        }
     }
 };

@@ -393,19 +393,19 @@ void VSRemoteGame::GameLoop() {
     if (socket->Send(this->Serialize()) < 0) {
         std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
         Console::Sleep(1000);
-        return;
+        gameover = true;
     };
 
     int a = 0;
 
-    while (true) {
+    while (!gameover) {
         try {
             this->Deserialize(socket->Recv());
         }
         catch (const int& error) {
             std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
             Console::Sleep(1000);
-            return;
+            break;
         }
 
         if (!my_board->IsBusy()) {
@@ -464,7 +464,7 @@ void VSRemoteGame::GameLoop() {
             other_board->SetNextBiPuyo(BiPuyoGenerator::GenerateEmptyBipuyo());
         }
         obstacle_to_send = my_board->SendObstacles();
-        gameover = my_board->IsGameOver();
+        gameover = my_board->IsGameOver() || other_board->IsGameOver();
         // process
 
         Draw();
@@ -473,6 +473,7 @@ void VSRemoteGame::GameLoop() {
         if (socket->Send(this->Serialize()) < 0) {
             std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
             Console::Sleep(1000);
+            break;
         }
     }
 
