@@ -51,6 +51,8 @@ public:
 
 class VSRemoteGame : public VSGame {
     std::shared_ptr<Socket> socket;
+    int obstacle_to_send = 0;
+    int obstacle_to_take = 0;
 public:
     virtual bool GameInit();
     virtual void GameLoop();

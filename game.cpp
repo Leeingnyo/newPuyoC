@@ -253,6 +253,7 @@ void VSGame::GameLoop() {
             my_next_bipuyo = my_bipuyo_generator->GenerateBipuyo();
         }
         other_board->TakeObstacles(my_board->SendObstacles());
+        // effect please
         other_board->Update();
         other_board->UpdatePlayerInformation(other_info);
         if (other_board->IsNeedNext()) {
@@ -381,7 +382,6 @@ bool VSRemoteGame::GameInit() {
     other_board = std::make_shared<Board>();
     other_board->SetNextBiPuyo(BiPuyoGenerator::GenerateEmptyBipuyo());
     other_next_bipuyo = BiPuyoGenerator::GenerateEmptyBipuyo();
-    // 여러 가지 이니셜라이징
 
     Console::ScreenClear();
     std::cout << Console::GotoXY(X(0), X(0));
@@ -451,6 +451,7 @@ void VSRemoteGame::GameLoop() {
         }
         // input
         
+        my_board->TakeObstacles(obstacle_to_take);
         my_board->Update();
         my_board->UpdatePlayerInformation(my_info);
         if (my_board->IsNeedNext()) {
@@ -462,6 +463,7 @@ void VSRemoteGame::GameLoop() {
         if (other_board->IsNeedNext()) {
             other_board->SetNextBiPuyo(BiPuyoGenerator::GenerateEmptyBipuyo());
         }
+        obstacle_to_send = my_board->SendObstacles();
         gameover = my_board->IsGameOver();
         // process
 
@@ -486,6 +488,7 @@ std::string VSRemoteGame::Serialize() {
             << "P{" << my_info.Serialize() << "}"
             << "M{" << my_board->Serialize() << "}"
             << "B{" << my_next_bipuyo->Serialize() << "}"
+            << "O{" << obstacle_to_send << "}"
         << "}";
     return data.str();
 }
@@ -533,6 +536,16 @@ void VSRemoteGame::Deserialize(std::string data) {
                 buffer << token;
             } break;
             case 4: {
+                if (token == 'O') continue;
+                if (token == '{') continue;
+                if (token == '}') {
+                    obstacle_to_take = std::stoi(buffer.str());
+                    buffer.str("");
+                    state = 5;
+                }
+                buffer << token;
+            } break;
+            case 5: {
                 continue;
             } break;
         }
