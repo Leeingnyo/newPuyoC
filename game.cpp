@@ -390,15 +390,12 @@ bool VSRemoteGame::GameInit() {
     return true;
 }
 void VSRemoteGame::GameLoop() {
-    if (socket->Send(this->Serialize()) < 0) {
-        std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
-        Console::Sleep(1000);
-        gameover = true;
-    };
-
-    int a = 0;
-
     while (!gameover) {
+        if (socket->Send(this->Serialize()) < 0) {
+            std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
+            Console::Sleep(1000);
+            break;
+        }
         try {
             this->Deserialize(socket->Recv());
         }
@@ -469,12 +466,6 @@ void VSRemoteGame::GameLoop() {
 
         Draw();
         Console::Sleep(16); // ?
-
-        if (socket->Send(this->Serialize()) < 0) {
-            std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
-            Console::Sleep(1000);
-            break;
-        }
     }
 
     socket->Close();
