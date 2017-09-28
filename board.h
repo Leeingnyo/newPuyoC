@@ -457,6 +457,7 @@ public:
                 data << map[i][j].Serialize();
             }
         }
+        data << static_cast<int>(state);
         if (bipuyo) {
             data << bipuyo->Serialize();
             data << bipuyo_x << " ";
@@ -470,14 +471,16 @@ public:
                 map[i][j].Deserialize(data.at(i * MAP_WIDTH + j));
             }
         }
-        if (data.length() > MAP_HEIGHT * MAP_WIDTH) {
+        int stateInteger = std::stoi(data.substr(MAP_HEIGHT * MAP_WIDTH, 1));
+        state = static_cast<State>(stateInteger);
+        if (data.length() > MAP_HEIGHT * MAP_WIDTH + 1) {
             if (bipuyo) {
                 bipuyo = BiPuyoGenerator::GenerateEmptyBipuyo();
             }
-            bipuyo->Deserialize(data.substr(MAP_HEIGHT * MAP_WIDTH, 3));
+            bipuyo->Deserialize(data.substr(MAP_HEIGHT * MAP_WIDTH + 1, 3));
 
             std::string buf;
-            std::stringstream ss(data.substr(MAP_HEIGHT * MAP_WIDTH + 3));
+            std::stringstream ss(data.substr(MAP_HEIGHT * MAP_WIDTH + 1 + 3));
             std::vector<std::string> tokens;
             while (ss >> buf)
                 tokens.push_back(buf);
@@ -485,10 +488,6 @@ public:
             bipuyo_y = std::stoi(tokens[1]);
         }
         else {
-            state = State::NEED_NEXT;
-        }
-        if (!map[1][2].IsBlank()) {
-            state = State::GAMEOVER;
         }
     }
 };

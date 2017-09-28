@@ -402,7 +402,7 @@ void VSRemoteGame::GameLoop() {
         try {
             this->Deserialize(socket->Recv());
         }
-        catch (const int& error) {
+        catch (int error) {
             std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
             Console::Sleep(1000);
             break;
@@ -455,13 +455,8 @@ void VSRemoteGame::GameLoop() {
         my_board->Update();
         my_board->UpdatePlayerInformation(my_info);
         if (my_board->IsNeedNext()) {
-            // need next bipuyo
             my_board->SetNextBiPuyo(my_next_bipuyo);
-            // set next bipuyo
             my_next_bipuyo = my_bipuyo_generator->GenerateBipuyo();
-        }
-        if (other_board->IsNeedNext()) {
-            other_board->SetNextBiPuyo(BiPuyoGenerator::GenerateEmptyBipuyo());
         }
         obstacle_to_send = my_board->SendObstacles();
         gameover = my_board->IsGameOver() || other_board->IsGameOver();
