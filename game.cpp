@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 
 #include <arpa/inet.h>
 #include <sys/types.h>
@@ -391,6 +392,8 @@ bool VSRemoteGame::GameInit() {
 }
 void VSRemoteGame::GameLoop() {
     while (!gameover) {
+        auto start = std::chrono::system_clock::now();
+
         if (socket->Send(this->Serialize()) < 0) {
             std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
             Console::Sleep(1000);
@@ -465,7 +468,11 @@ void VSRemoteGame::GameLoop() {
         // process
 
         Draw();
-        Console::Sleep(16); // ?
+
+        auto end = std::chrono::system_clock::now();
+        auto delta = (std::chrono::duration_cast<std::chrono::milliseconds>(end - start)).count();
+        int tick = delta > 16 ? 0 : 16 - delta;
+        Console::Sleep(tick);
     }
 
     socket->Close();
