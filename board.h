@@ -191,9 +191,12 @@ public:
         this->obstacle_number_taken += obstacle_number_taken;
     }
     int SendObstacles() {
-        int obstacle_number_to_send = this->obstacle_number_to_send;
-        this->obstacle_number_to_send = 0;
-        return obstacle_number_to_send;
+        if (!IsBusy()) {
+            int obstacle_number_to_send = this->obstacle_number_to_send;
+            this->obstacle_number_to_send = 0;
+            return obstacle_number_to_send;
+        }
+        return 0;
     }
     
     void Update() {
