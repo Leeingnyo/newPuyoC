@@ -474,7 +474,7 @@ public:
         int stateInteger = std::stoi(data.substr(MAP_HEIGHT * MAP_WIDTH, 1));
         state = static_cast<State>(stateInteger);
         if (data.length() > MAP_HEIGHT * MAP_WIDTH + 1) {
-            if (bipuyo) {
+            if (bipuyo == nullptr) {
                 bipuyo = BiPuyoGenerator::GenerateEmptyBipuyo();
             }
             bipuyo->Deserialize(data.substr(MAP_HEIGHT * MAP_WIDTH + 1, 3));
@@ -488,6 +488,7 @@ public:
             bipuyo_y = std::stoi(tokens[1]);
         }
         else {
+            bipuyo.reset();
         }
     }
 };
