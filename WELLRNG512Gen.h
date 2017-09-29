@@ -4,12 +4,13 @@ class WELLRNG512Generator {
     int index = 0;
     public:
         WELLRNG512Generator() {
-            srand(time(NULL));
+            std::random_device rd;
+            std::mt19937 rand(rd());
             for (int i = 0; i < 16; i++)
                 state[i] = rand();
         }
         WELLRNG512Generator(const int &seed) {
-            srand(seed);
+            std::mt19937 rand(seed);
             for (int i = 0; i < 16; i++)
                 state[i] = rand();
         }

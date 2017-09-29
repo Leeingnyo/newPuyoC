@@ -1,11 +1,11 @@
 ﻿#include <iostream>
 #include <iomanip>
 #include <sstream>
-#include <ctime>
 #include <cmath>
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <random>
 #include <chrono>
 
 #include "common.h"
