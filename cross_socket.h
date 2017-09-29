@@ -10,7 +10,7 @@
 
 #define BUFF_SIZE 8192
 
-enum class ErrorCode {NO_ERROR, CREATE_ERROR, BIND_ERROR, LISTEN_ERROR, ACCEPT_ERROR, CONNECT_ERROR, RECV_ERROR, SEND_ERROR};
+enum class ErrorCode {NO_ERR, CREATE_ERROR, BIND_ERROR, LISTEN_ERROR, ACCEPT_ERROR, CONNECT_ERROR, RECV_ERROR, SEND_ERROR};
 
 class Socket {
 protected:
@@ -21,7 +21,7 @@ protected:
     struct sockaddr_in your_address;
     unsigned int your_address_size;
 
-    ErrorCode error_code = ErrorCode::NO_ERROR;
+    ErrorCode error_code = ErrorCode::NO_ERR;
 public:
     Socket();
     bool IsValid();

@@ -24,10 +24,10 @@ Socket::Socket() {
 }
 
 inline bool Socket::IsValid() {
-    return error_code == ErrorCode::NO_ERROR;
+    return error_code == ErrorCode::NO_ERR;
 }
 inline bool Socket::IsInvalid() {
-    return error_code != ErrorCode::NO_ERROR;
+    return error_code != ErrorCode::NO_ERR;
 }
 void Socket::Close() {
     close(my_socket);
