@@ -9,6 +9,7 @@ class Game {
 public:
     virtual bool GameInit()=0;
     virtual void GameLoop()=0;
+    virtual void GameResult()=0;
     virtual void Draw()=0;
 private:
 protected:
@@ -28,6 +29,7 @@ class SingleGame : public Game {
 public:
     virtual bool GameInit();
     virtual void GameLoop();
+    virtual void GameResult();
     virtual void Draw();
 };
 
@@ -46,6 +48,7 @@ protected:
 public:
     virtual bool GameInit();
     virtual void GameLoop();
+    virtual void GameResult();
     virtual void Draw();
 };
 

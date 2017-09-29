@@ -157,6 +157,16 @@ void SingleGame::GameLoop() {
         Console::Sleep(16); // ?
     }
 }
+void SingleGame::GameResult() {
+    while (kbhit()) getch();
+    Console::ScreenClear();
+    std::cout << Console::white << Console::GotoXY(0, 0)
+        << "게임 끝" << std::endl
+        << "점수: " << my_info.score << std::endl
+        << "최대 연쇄: " << my_info.max_chain_number << std::endl
+        << "메인으로 돌아가려면 아무키나 누르세요" << std::endl;
+    getch();
+}
 void SingleGame::Draw() {
     int offset_x = 0;
     int offset_y = 0;
@@ -268,6 +278,24 @@ void VSGame::GameLoop() {
         Draw();
         Console::Sleep(16);
     }
+}
+void VSGame::GameResult() {
+    while (kbhit()) getch();
+    Console::ScreenClear();
+    std::cout << Console::white << Console::GotoXY(0, 0);
+    if (my_board->IsGameOver()) {
+        std::cout << "졌습니다..." << std::endl;
+    }
+    else {
+        std::cout << "이겼습니다!" << std::endl;
+    }
+    std::cout
+        << "내 점수: " << my_info.score << std::endl
+        << "내 최대 연쇄: " << my_info.max_chain_number << std::endl
+        << "상대 점수: " << other_info.score << std::endl
+        << "상대 최대 연쇄: " << other_info.max_chain_number << std::endl
+        << "메인으로 돌아가려면 아무키나 누르세요" << std::endl;
+    getch();
 }
 void VSGame::Draw() {
     /*
@@ -400,7 +428,13 @@ void VSRemoteGame::GameLoop() {
             break;
         }
         try {
-            this->Deserialize(socket->Recv());
+            auto response = socket->Recv();
+            if (response.compare("end")) {
+                this->Deserialize(response);
+            }
+            else {
+                break;
+            }
         }
         catch (int error) {
             std::cout << Console::red << Console::GotoXY(0, 0) << "통신 에러";
@@ -470,6 +504,8 @@ void VSRemoteGame::GameLoop() {
         Console::Sleep(tick);
     }
 
+    socket->Send("end");
+    Console::Sleep(50); // 왜 필요할까
     socket->Close();
 }
 void VSRemoteGame::Draw() {

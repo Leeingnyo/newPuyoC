@@ -57,8 +57,10 @@ int main() {
             default: continue;
         }
         
-        if (game->GameInit())
+        if (game->GameInit()) {
             game->GameLoop();
+            game->GameResult();
+        }
     }
     
     std::cout << Console::gray;
