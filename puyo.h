@@ -2,8 +2,9 @@
 
 class WELLRNG512Generator;
 
-enum class PuyoKind : char { BLANK, AKARI, KYOKO, YUI, CHINATSU, AYANO, CHITOSE, SAKURAKO, HIMAWARI, OBSTACLE, EXPLOSION };
+// enum class PuyoKind : char { BLANK, AKARI, KYOKO, YUI, CHINATSU, AYANO, CHITOSE, SAKURAKO, HIMAWARI, OBSTACLE, EXPLOSION };
                             // NOTHING, RED, YELLOW, BLACK, PINK, PURPLE, WHITE, BRIGHT BROWN, BLUE, TRANSPARENT, GRAY
+enum class PuyoKind : char { BLANK, RED, YELLOW, GREEN, BLUE, OBSTACLE, EXPLOSION };
                             // a    b       c       d       e       f       g       h           i       j           k
 
 class Puyo {
@@ -23,17 +24,17 @@ public:
             case PuyoKind::BLANK:
                 std::cout << Console::black << "  ";
                 break;
-            case PuyoKind::AKARI:
+            case PuyoKind::RED:
                 std::cout << Console::red << "●";
                 break;
-            case PuyoKind::KYOKO:
+            case PuyoKind::YELLOW:
                 std::cout << Console::yellow << "●";
                 break;
-            case PuyoKind::YUI:
-                std::cout << Console::dark_gray << "●";
+            case PuyoKind::GREEN:
+                std::cout << Console::green << "●";
                 break;
-            case PuyoKind::CHINATSU:
-                std::cout << Console::violet << "●";
+            case PuyoKind::BLUE:
+                std::cout << Console::blue << "●";
                 break;
             case PuyoKind::OBSTACLE:
                 std::cout << Console::white << "○";
