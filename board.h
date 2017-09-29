@@ -363,6 +363,11 @@ private:
                     chain_list.push_back(chain);
                     removed_obstacles.insert(removed_obstacles.end(), nearby_obstacles.begin(), nearby_obstacles.end());
                 }
+                else {
+                    for (auto& obstacles : nearby_obstacles) {
+                        check[obstacles.y][obstacles.x] = false;
+                    }
+                }
             }
         }
         
