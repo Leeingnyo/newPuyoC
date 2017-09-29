@@ -1,3 +1,13 @@
+#ifdef _WIN32
+
+#else
+
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+
+#endif
+
 #define BUFF_SIZE 8192
 
 enum class ErrorCode {NO_ERROR, CREATE_ERROR, BIND_ERROR, LISTEN_ERROR, ACCEPT_ERROR, CONNECT_ERROR, RECV_ERROR, SEND_ERROR};
