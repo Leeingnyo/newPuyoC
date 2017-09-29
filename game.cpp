@@ -284,16 +284,16 @@ void VSGame::GameResult() {
     Console::ScreenClear();
     std::cout << Console::white << Console::GotoXY(0, 0);
     if (my_board->IsGameOver()) {
-        std::cout << "졌습니다..." << std::endl;
+        std::cout << "1p가 이겼습니다." << std::endl;
     }
     else {
-        std::cout << "이겼습니다!" << std::endl;
+        std::cout << "2p가 이겼습니다." << std::endl;
     }
     std::cout
-        << "내 점수: " << my_info.score << std::endl
-        << "내 최대 연쇄: " << my_info.max_chain_number << std::endl
-        << "상대 점수: " << other_info.score << std::endl
-        << "상대 최대 연쇄: " << other_info.max_chain_number << std::endl
+        << "1p 점수: " << my_info.score << std::endl
+        << "1p 최대 연쇄: " << my_info.max_chain_number << std::endl
+        << "2p 점수: " << other_info.score << std::endl
+        << "2p 최대 연쇄: " << other_info.max_chain_number << std::endl
         << "메인으로 돌아가려면 아무키나 누르세요" << std::endl;
     getch();
 }
@@ -509,6 +509,24 @@ void VSRemoteGame::GameLoop() {
     socket->Send("end");
     Console::Sleep(50); // 왜 필요할까
     socket->Close();
+}
+void VSRemoteGame::GameResult() {
+    while (kbhit()) getch();
+    Console::ScreenClear();
+    std::cout << Console::white << Console::GotoXY(0, 0);
+    if (my_board->IsGameOver()) {
+        std::cout << "졌습니다..." << std::endl;
+    }
+    else {
+        std::cout << "이겼습니다!" << std::endl;
+    }
+    std::cout
+        << "내 점수: " << my_info.score << std::endl
+        << "내 최대 연쇄: " << my_info.max_chain_number << std::endl
+        << "상대 점수: " << other_info.score << std::endl
+        << "상대 최대 연쇄: " << other_info.max_chain_number << std::endl
+        << "메인으로 돌아가려면 아무키나 누르세요" << std::endl;
+    getch();
 }
 void VSRemoteGame::Draw() {
     VSGame::Draw();

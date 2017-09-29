@@ -59,6 +59,7 @@ class VSRemoteGame : public VSGame {
 public:
     virtual bool GameInit();
     virtual void GameLoop();
+    virtual void GameResult();
     virtual void Draw();
 
     std::string Serialize();
