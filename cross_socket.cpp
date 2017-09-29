@@ -1,23 +1,11 @@
-#ifdef _WIN32
 
-
-
-#else
-
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <sys/types.h> 
-#include <sys/socket.h>
-
-#include <iostream>
 #include <string>
-#include <cstring>
 
 #include "cross_socket.h"
 
 Socket::Socket() {
     my_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if (my_socket == -1) {
+    if (my_socket == INVALID_SOCKET) {
         error_code = ErrorCode::CREATE_ERROR;
         return;
     }
@@ -30,7 +18,28 @@ inline bool Socket::IsInvalid() {
     return error_code != ErrorCode::NO_ERR;
 }
 void Socket::Close() {
+#ifdef _WIN32
+    closesocket(my_socket);
+#else
     close(my_socket);
+#endif
+}
+
+
+int Socket::StartUp() {
+#ifdef _WIN32
+    WSADATA wsa_data;
+    return WSAStartup(MAKEWORD(1, 1), &wsa_data);
+#else
+    return 0;
+#endif
+}
+int Socket::CleanUp() {
+#ifdef _WIN32
+    return WSACleanup();
+#else
+    return 0;
+#endif
 }
 
 int ServerSocket::Bind(std::string ip_address, int port) {
@@ -48,15 +57,15 @@ int ServerSocket::Bind(std::string ip_address, int port) {
 }
 int ServerSocket::Listen(int backlog) {
     if (IsInvalid()) return -2;
-    if (listen(my_socket, backlog) == -1) {
+    if (listen(my_socket, backlog) == SOCKET_ERROR) {
         error_code = ErrorCode::LISTEN_ERROR;
         return -1;
     }
     return 0;
 }
 int ServerSocket::Accept() {
-    your_socket = accept(my_socket, (struct sockaddr*)&your_address, &your_address_size);
-    if (your_socket == -1) {
+    your_socket = accept(my_socket, (struct sockaddr*)&your_address, (int *)&your_address_size);
+    if (your_socket == INVALID_SOCKET) {
         error_code = ErrorCode::ACCEPT_ERROR;
         return -1;
     }
@@ -81,10 +90,18 @@ int ServerSocket::Send(std::string data) {
 
 void ServerSocket::Close() {
     CloseClient();
+#ifdef _WIN32
+    closesocket(my_socket);
+#else
     close(my_socket);
+#endif
 }
 void ServerSocket::CloseClient() {
+#ifdef _WIN32
+    closesocket(your_socket);
+#else
     close(your_socket);
+#endif
 }
 
 int ClientSocket::Connect(std::string ip_address, int port) {
@@ -93,7 +110,7 @@ int ClientSocket::Connect(std::string ip_address, int port) {
     your_address.sin_port = htons(port);
     your_address.sin_addr.s_addr = inet_addr(ip_address.c_str());
 
-    if (connect(my_socket, (struct sockaddr*)&your_address, sizeof(your_address)) == -1) {
+    if (connect(my_socket, (struct sockaddr*)&your_address, sizeof(your_address)) == SOCKET_ERROR) {
         error_code = ErrorCode::CONNECT_ERROR;
         return -1;
     }
@@ -115,5 +132,3 @@ std::string ClientSocket::Recv() {
 int ClientSocket::Send(std::string data) {
     return send(my_socket, data.c_str(), data.length() + 1, 0);
 }
-
-#endif

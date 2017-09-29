@@ -9,8 +9,8 @@
 #include <chrono>
 
 #include "common.h"
-#include "cross_library.h"
 #include "cross_socket.h"
+#include "cross_library.h"
 #include "WELLRNG512Gen.h"
 
 #include "player_information.h"

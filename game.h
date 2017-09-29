@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-class PlayerInformation;
+struct PlayerInformation;
 class BiPuyo;
 class BiPuyoGenerator;
 class Board;

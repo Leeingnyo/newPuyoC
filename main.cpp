@@ -8,8 +8,8 @@
 #include <algorithm>
 
 #include "common.h"
-#include "cross_library.h"
 #include "cross_socket.h"
+#include "cross_library.h"
 #include "WELLRNG512Gen.h"
 
 #include "player_information.h"
@@ -23,6 +23,10 @@ int main() {
     srand(time(NULL));
     Console::ScreenClear();
     Console::HideCursor();
+    if (Socket::StartUp()) {
+        std::cout << "Winsock 초기화 실패" << std::endl;
+        return -1;
+    }
     
     bool app_alive = true;
     while (app_alive) {
@@ -68,6 +72,7 @@ int main() {
     std::cout << Console::gray;
     Console::ShowCursor();
     Console::ScreenClear();
+    Socket::CleanUp();
     return 0;
 }
 
