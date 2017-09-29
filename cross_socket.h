@@ -12,7 +12,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-typedef SOCKET int;
+#define SOCKET int
 #define INVALID_SOCKET (-1)
 #define SOCKET_ERROR (-1)
 

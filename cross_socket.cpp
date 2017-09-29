@@ -1,5 +1,6 @@
 
 #include <string>
+#include <cstring>
 
 #include "cross_socket.h"
 
@@ -64,7 +65,11 @@ int ServerSocket::Listen(int backlog) {
     return 0;
 }
 int ServerSocket::Accept() {
+#ifdef _WIN32
     your_socket = accept(my_socket, (struct sockaddr*)&your_address, (int *)&your_address_size);
+#else
+    your_socket = accept(my_socket, (struct sockaddr*)&your_address, &your_address_size);
+#endif
     if (your_socket == INVALID_SOCKET) {
         error_code = ErrorCode::ACCEPT_ERROR;
         return -1;
