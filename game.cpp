@@ -501,6 +501,8 @@ void VSRemoteGame::GameLoop() {
         auto end = std::chrono::system_clock::now();
         auto delta = (std::chrono::duration_cast<std::chrono::milliseconds>(end - start)).count();
         int tick = delta > 16 ? 0 : 16 - delta;
+        std::cout << Console::GotoXY(0, 19) << Console::red << "        ";
+        std::cout << Console::GotoXY(0, 19) << Console::red << "FPS: " << 1000 / (delta > 16 ? delta : 16);
         Console::Sleep(tick);
     }
 
