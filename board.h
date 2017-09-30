@@ -5,7 +5,6 @@
 
 class Puyo;
 class BiPuyo;
-class Game;
 
 class Board {
     enum class State { IDLE, DROP, CHAINING, DROP_OBSTACLE, NEED_NEXT, HALT, GAMEOVER };
@@ -308,19 +307,32 @@ private:
         bool chaining = false;
         static std::vector<std::vector<Pair>> chain_list;
         static std::vector<Pair> removed_obstacles;
+        static const int CHAIN_BONUS[] = {0, 8, 16, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480, 512};
+        static const int MAX_REMOVE_BONUS[] = {0, 2, 3, 4, 5, 6, 7};
+        // FIXME: move this to static member variables (without cpp file, I want)
+        // but it caused link error
         
         if (chaining_t > CHAINING_FRAME) {
+            int removed_puyo_number = 0;
+            int max_removed_bonus = 0;
             for (auto &chain : chain_list) {
-                gain_score += chain.size() * 10 * pow(2, chain_number - 1); // 점수 계산 
-                obstacle_number_to_send += pow(2, chain_number) - 1;
-                while (obstacle_number_taken > 0 && obstacle_number_to_send > 0) {
-                    obstacle_number_taken -= 1;
-                    obstacle_number_to_send -= 1;
-                }
+                int chain_size = chain.size();
+                removed_puyo_number += chain_size;
+                max_removed_bonus += chain_size < 4 ? 0 : chain_size > 10 ? 10 : MAX_REMOVE_BONUS[chain_size - 4];
+                // FIXME: I want to this logic to function 
                 for (auto &pair : chain) {
                     map[pair.y][pair.x] = Puyo();
                 }
             }
+            // http://kayezero.blogspot.kr/2009/08/blog-post_8347.html 점수 계산법
+            int gained_score = removed_puyo_number * (CHAIN_BONUS[chain_number - 1] + max_removed_bonus/* + 12*/ + 1);
+            gain_score += gained_score;
+            obstacle_number_to_send += std::ceil(gained_score / 7.0);
+            while (obstacle_number_taken > 0 && obstacle_number_to_send > 0) {
+                obstacle_number_taken -= 1;
+                obstacle_number_to_send -= 1;
+            }
+            // TODO: 에잇 받아라 아이스스톰 등 effect 발행
             for (auto &pair : removed_obstacles) {
                 map[pair.y][pair.x] = Puyo();
             }
