@@ -110,6 +110,17 @@ void ServerSocket::CloseClient() {
 }
 
 int ClientSocket::Connect(std::string ip_address, int port) {
+#ifdef _WIN32
+#else
+    struct hostent* host_info;
+    struct in_addr addr;
+    if ((host_info = gethostbyname(ip_address.c_str())) == 0) {
+        error_code = ErrorCode::CONNECT_ERROR;
+        return -2;
+    }
+    memcpy(&addr, host_info->h_addr_list[0], host_info->h_length);
+    ip_address = std::string(inet_ntoa(addr));
+#endif
     memset(&your_address, 0, sizeof(your_address));
     your_address.sin_family = AF_INET;
     your_address.sin_port = htons(port);

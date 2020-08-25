@@ -14,7 +14,8 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    if (std::string("server").compare(std::string(argv[1]))) {
+    if (std::string("server").compare(std::string(argv[1])) == 0) {
+        int i = 0;
         std::cout << "server!" << std::endl;
         ServerSocket server;
         if (server.Bind("127.0.0.1", 6543)) {
@@ -27,6 +28,9 @@ int main(int argc, char *argv[]) {
             return -1;
         }
         std::cout << "listen!" << std::endl;
+
+        while (i < 10) {
+
         if (server.Accept()) {
             std::cout << "accept error" << std::endl;
             return -1;
@@ -40,7 +44,7 @@ int main(int argc, char *argv[]) {
             return -1;
         }
         std::cout << buff_rcv;
-        std::cout << "World!";
+        std::cout << "World!" << std::endl;
         if (server.Send("World!") < 0) {
             std::cout << "send error" << std::endl;
             server.CloseClient();
@@ -48,6 +52,9 @@ int main(int argc, char *argv[]) {
             return -1;
         }
         server.CloseClient();
+        i++;
+
+        }
         server.Close();
     }
     else {
